@@ -26,8 +26,17 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
                 password
             });
 
-            const { token, user } = response.data;
-            localStorage.setItem('token', token);
+            console.log(response)
+
+            const {
+                access_token,
+                refresh_token,
+                access_expires,
+                user
+            } = response.data.data;
+
+            console.log(access_token, user)
+            localStorage.setItem('token', access_token);
             handleLoginSuccess(user);
         } catch (err) {
             alert(err.response?.data?.message || 'Помилка при вході');
