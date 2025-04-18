@@ -152,8 +152,31 @@ const PatientDashboard = ({ onLogout }) => {
         setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
     };
 
-    const handleCancelAppointment = (index) => {
-        // TODO send API request to cancel given appointment for current user
+    const handleCancelAppointment = async (index) => {
+        const appointment = appointments[index];
+        const token = localStorage.getItem('token');
+
+        try {
+            await axios.put(
+                `http://127.0.0.1:8000/appointments/${appointment.id}`,
+                { status: 'скасовано' },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+
+            const updated = [...appointments];
+            updated[index].status = 'скасовано';
+            setAppointments(updated);
+
+            alert('Прийом успішно скасовано');
+        } catch (error) {
+            console.error('Помилка при скасуванні прийому:', error.response?.data || error.message);
+            alert('Не вдалося скасувати прийом');
+        }
     };
 
     const handleCancelEdit = () => {
