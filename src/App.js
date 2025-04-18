@@ -18,9 +18,9 @@ function AppWrapper() {
     const navigate = useNavigate();
 
     const handleLoginSuccess = (user) => {
-        alert(`Успішний вхід як ${user.user_type === 'doctor' ? 'doctor' : 'patient'}`);
+        alert(`Успішний вхід як ${user.userType === 'doctor' ? 'doctor' : 'patient'}`);
         setCurrentUser(user);
-        if (user.user_type === 'doctor') {
+        if (user.userType === 'doctor') {
             localStorage.setItem('currentDoctor', JSON.stringify(user));
             navigate('/doctor');
         } else {
