@@ -22,7 +22,8 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
         const token = localStorage.getItem('token');
         if (token) {
             const decoded = jwtDecode(token);
-            const username = decoded.name;
+            console.log(decoded);
+            const username = decoded.userName;
 
             setDoctor({ name: username });
         }
