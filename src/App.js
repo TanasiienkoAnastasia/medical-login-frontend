@@ -14,40 +14,50 @@ import DoctorPatientsPage from './components/DoctorPatientsPage';
 import PatientDashboard from './components/PatientDashboard';
 import InjuryRecommendation from './components/InjuryRecommendation';
 
-function App() {
+function AppWrapper() {
     const [currentUser, setCurrentUser] = useState(null);
+    const navigate = useNavigate();
 
     const handleLoginSuccess = (user) => {
         setCurrentUser(user);
         if (user.specialty) {
             localStorage.setItem('currentDoctor', JSON.stringify(user));
+            navigate('/doctor');
+        } else {
+            navigate('/patient');
         }
     };
 
     const handleLogout = () => {
         setCurrentUser(null);
         localStorage.removeItem('currentDoctor');
+        navigate('/login');
     };
 
     return (
-        <Router>
-            <Routes>
-                <Route path="/login" element={
-                    <LoginPage
-                        handleLoginSuccess={handleLoginSuccess}
-                        handleRegister={() => window.location.href = '/register'}
-                        handleBack={() => window.location.href = '/login'}
-                    />
-                } />
-                <Route path="/register" element={<RegistrationPage handleBack={() => window.location.href = '/login'} />} />
-                <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => window.location.href = '/doctor/patients'} />} />
-                <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => window.location.href = '/doctor'} />} />
-                <Route path="/patient" element={<PatientDashboard patient={currentUser} onLogout={handleLogout} />} />
-                <Route path="/recommendation" element={<InjuryRecommendation />} />
+        <Routes>
+            <Route path="/login" element={
+                <LoginPage
+                    handleLoginSuccess={handleLoginSuccess}
+                    handleRegister={() => navigate('/register')}
+                    handleBack={() => navigate('/login')}
+                />
+            } />
+            <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
+            <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
+            <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => navigate('/doctor')} />} />
+            <Route path="/patient" element={<PatientDashboard patient={currentUser} onLogout={handleLogout} />} />
+            <Route path="/recommendation" element={<InjuryRecommendation />} />
+            <Route path="/" element={<Navigate to="/login" />} />
+            <Route path="*" element={<div>Сторінка не знайдена</div>} />
+        </Routes>
+    );
+}
 
-                <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="*" element={<div>Сторінка не знайдена</div>} />
-            </Routes>
+function App() {
+    return (
+        <Router>
+            <AppWrapper />
         </Router>
     );
 }
