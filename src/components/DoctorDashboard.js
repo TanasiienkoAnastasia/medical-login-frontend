@@ -42,8 +42,7 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
 
             <Container>
                 <Title>Керуйте прийомами ваших пацієнтів</Title>
-
-                // TODO doctor & patient should have ability to set image during registration
+                {/* TODO doctor and patient should have ability to set image during registration */}
                 <DoctorImage
                     src='https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'
                     alt="Doctor"
