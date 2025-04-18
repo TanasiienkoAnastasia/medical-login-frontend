@@ -115,7 +115,6 @@ const RegistrationPage = ({ handleBack }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate required fields based on user type
         if (
             !formData.name ||
             !formData.email ||
@@ -138,19 +137,12 @@ const RegistrationPage = ({ handleBack }) => {
         };
 
         try {
-            const response = await axios.post('http://127.0.0.1:8000/auth/register', newUser);
-
-            if (response.ok) {
-                alert('Реєстрація успішна');
-                handleBack();
-            } else {
-                const errorData = await response.json();
-                console.error('Помилка при реєстрації:', errorData);
-                alert('Помилка при реєстрації');
-            }
+            await axios.post('http://127.0.0.1:8000/auth/register', newUser);
+            alert('Реєстрація успішна');
+            handleBack();
         } catch (error) {
-            console.error('Не вдалося надіслати запит:', error);
-            alert('Сталася помилка при відправці запиту');
+            console.error('Помилка при реєстрації:', error.response?.data || error.message);
+            alert(error.response?.data?.message || 'Помилка при реєстрації');
         }
     };
 
