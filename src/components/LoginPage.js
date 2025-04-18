@@ -5,15 +5,12 @@ import {
     Card,
     Title,
     Input,
-    RoleSwitcher,
-    RoleButton,
     SubmitButton,
     BottomRow,
     BackButton
 } from './LoginPage.styles';
 
-const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
-    const [role, setRole] = useState('patient');
+const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -68,7 +65,6 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
                     <button onClick={handleRegister} style={{ background: 'none', color: '#d63384', border: 'none', cursor: 'pointer' }}>
                         Немає акаунту? Зареєструватися
                     </button>
-                    <BackButton onClick={handleBack}>Назад</BackButton>
                 </BottomRow>
             </Card>
         </Container>

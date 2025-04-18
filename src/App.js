@@ -40,7 +40,6 @@ function AppWrapper() {
                 <LoginPage
                     handleLoginSuccess={handleLoginSuccess}
                     handleRegister={() => navigate('/register')}
-                    handleBack={() => navigate('/login')}
                 />
             } />
             <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
