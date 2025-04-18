@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -101,10 +102,10 @@ const RegistrationPage = ({ handleBack }) => {
         email: '',
         password: '',
         specialty: '',
-        phone: '', // Used phone instead of age
+        phone: '',
     });
 
-    const [userType, setUserType] = useState('patient'); // Default user type is patient
+    const [userType, setUserType] = useState('patient');
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -137,11 +138,7 @@ const RegistrationPage = ({ handleBack }) => {
         };
 
         try {
-            const response = await fetch('http://localhost:8000/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(newUser),
-            });
+            const response = await axios.post('http://127.0.0.1:8000/auth/register', newUser);
 
             if (response.ok) {
                 alert('Реєстрація успішна');
@@ -187,7 +184,6 @@ const RegistrationPage = ({ handleBack }) => {
                         required
                     />
 
-                    {/* User type selection */}
                     <UserTypeSelector>
                         <UserTypeButton
                             type="button"
