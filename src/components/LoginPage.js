@@ -22,13 +22,9 @@ const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
                 password
             });
 
-            const {
-                access_token,
-                user
-            } = response.data.data;
+            const { access_token, user } = response.data.data;
 
-            localStorage.setItem('token', access_token);
-            handleLoginSuccess(user);
+            handleLoginSuccess(user, access_token);
         } catch (err) {
             alert(err.response?.data?.message || 'Помилка при вході');
         }

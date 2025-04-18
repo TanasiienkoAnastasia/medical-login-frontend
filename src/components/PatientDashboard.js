@@ -16,6 +16,8 @@ import {
     CancelButton
 } from './PatientDashboard.styles';
 
+// TODO should be moved to backend
+// TODO add doctor rating to backend???
 const InjuryRecommendation = ({ injuryType, setDoctors }) => {
     const doctors = [
         { id: 1, name: 'Іван Петрович', specialty: 'травматолог', rating: 4.5 },
@@ -36,20 +38,27 @@ const InjuryRecommendation = ({ injuryType, setDoctors }) => {
             selectedSpecialties.includes(doctor.specialty)
         );
         setDoctors(recommendedDoctors);
-    }, [injuryType, setDoctors]);
+    }, [doctors, injurySpecialties, injuryType, setDoctors]);
 
     return null;
 };
 
-const PatientDashboard = ({ patient, onLogout }) => {
-    const [appointments, setAppointments] = useState(patient.appointments || []);
+const PatientDashboard = ({ onLogout }) => {
+    const [appointments, setAppointments] = useState([]);
     const [form, setForm] = useState({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
     const [editingAppointment, setEditingAppointment] = useState(null);
     const [doctors, setDoctors] = useState([]);
+    const [patient, setPatient] = useState({});
 
     useEffect(() => {
-        const storedDoctors = JSON.parse(localStorage.getItem('doctors') || '[]');
-        setDoctors(storedDoctors);
+        // TODO set current patient to state
+        // use setPatient()
+
+        // TODO load and set collection of current patient appointments
+        // use setAppointments()
+
+        // TODO load list of all available doctors
+        // use setDoctors()
     }, []);
 
     const handleChange = (e) => {
@@ -68,15 +77,7 @@ const PatientDashboard = ({ patient, onLogout }) => {
             status: 'очікується',
         };
 
-        const updated = [...appointments, newAppointment];
-        setAppointments(updated);
-
-        const patients = JSON.parse(localStorage.getItem('patients') || '[]');
-        const updatedPatients = patients.map((p) =>
-            p.email === patient.email ? { ...p, appointments: updated } : p
-        );
-        localStorage.setItem('patients', JSON.stringify(updatedPatients));
-        localStorage.setItem('currentUser', JSON.stringify({ ...patient, appointments: updated }));
+        // TODO send API request to create new appointment for current patient
 
         setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
     };
@@ -102,25 +103,13 @@ const PatientDashboard = ({ patient, onLogout }) => {
         setAppointments(updatedAppointments);
         setEditingAppointment(null);
 
-        // TODO send updated appointments of current patient to backend API
+        // TODO send request to API to update given appointment
 
         setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
     };
 
     const handleCancelAppointment = (index) => {
-        const updatedAppointments = [...appointments];
-        updatedAppointments[index] = {
-            ...updatedAppointments[index],
-            status: 'скасовано',
-        };
-        setAppointments(updatedAppointments);
-
-        const patients = JSON.parse(localStorage.getItem('patients') || '[]');
-        const updatedPatients = patients.map((p) =>
-            p.email === patient.email ? { ...p, appointments: updatedAppointments } : p
-        );
-        localStorage.setItem('patients', JSON.stringify(updatedPatients));
-        localStorage.setItem('currentUser', JSON.stringify({ ...patient, appointments: updatedAppointments }));
+        // TODO send API request to cancel given appointment for current user
     };
 
     const handleCancelEdit = () => {

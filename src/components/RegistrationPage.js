@@ -130,7 +130,7 @@ const RegistrationPage = ({ handleBack }) => {
 
                     {userType === 'patient' && (
                         <Input
-                            type="tel" // Changed to tel for phone number input
+                            type="tel"
                             name="phone"
                             placeholder="Номер телефону"
                             value={formData.phone}

@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import {
     BrowserRouter as Router,
     Routes,
@@ -14,10 +13,11 @@ import DoctorPatientsPage from './components/DoctorPatientsPage';
 import PatientDashboard from './components/PatientDashboard';
 
 function AppWrapper() {
-    const [currentUser, setCurrentUser] = useState(null);
     const navigate = useNavigate();
 
-    const handleLoginSuccess = (user) => {
+    const handleLoginSuccess = (user, access_token) => {
+        localStorage.setItem('token', access_token);
+
         alert(`Успішний вхід як ${user.userType === 'doctor' ? 'лікар' : 'пацієнт'}`);
 
         if (user.userType === 'doctor') {
@@ -34,16 +34,11 @@ function AppWrapper() {
 
     return (
         <Routes>
-            <Route path="/login" element={
-                <LoginPage
-                    handleLoginSuccess={handleLoginSuccess}
-                    handleRegister={() => navigate('/register')}
-                />
-            } />
+            <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
             <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
             <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
             <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => navigate('/doctor')} />} />
-            <Route path="/patient" element={<PatientDashboard patient={currentUser} onLogout={handleLogout} />} />
+            <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
