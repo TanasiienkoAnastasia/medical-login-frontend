@@ -140,9 +140,19 @@ const RegistrationPage = ({ handleBack }) => {
             await axios.post('http://127.0.0.1:8000/auth/register', newUser);
             alert('Реєстрація успішна');
             handleBack();
-        } catch (error) {
-            console.error('Помилка при реєстрації:', error.response?.data || error.message);
-            alert(error.response?.data?.message || 'Помилка при реєстрації');
+        }
+        catch (error) {
+            const data = error.response?.data;
+
+            if (data?.errors && typeof data.errors === 'object') {
+                const messages = Object.entries(data.errors)
+                    .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
+                    .join('\n');
+
+                alert(`Помилки валідації:\n${messages}`);
+            } else {
+                alert(data?.message || 'Помилка при реєстрації');
+            }
         }
     };
 
