@@ -131,10 +131,10 @@ const RegistrationPage = ({ handleBack }) => {
             name: formData.name,
             email: formData.email,
             password: formData.password,
-            userType: userType, // Added userType
+            userType: userType,
             ...(userType === 'doctor'
                 ? { specialty: formData.specialty }
-                : { phone: formData.phone, appointments: [] }) // Changed age to phone
+                : { phone: formData.phone })
         };
 
         try {
