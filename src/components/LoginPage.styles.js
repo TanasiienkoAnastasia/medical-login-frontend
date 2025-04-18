@@ -69,15 +69,3 @@ export const BottomRow = styled.div`
   gap: 10px;
 `;
 
-export const BackButton = styled.button`
-  background-color: #d6a3c9;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #bd8db8;
-  }
-`;

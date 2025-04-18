@@ -6,8 +6,7 @@ import {
     Title,
     Input,
     SubmitButton,
-    BottomRow,
-    BackButton
+    BottomRow
 } from './LoginPage.styles';
 
 const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
