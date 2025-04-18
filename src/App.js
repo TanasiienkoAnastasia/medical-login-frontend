@@ -4,15 +4,14 @@ import RegistrationPage from './components/RegistrationPage';
 import DoctorDashboard from './components/DoctorDashboard';
 import DoctorPatientsPage from './components/DoctorPatientsPage';
 import PatientDashboard from './components/PatientDashboard';
-import InjuryRecommendation from './components/InjuryRecommendation'; // Import InjuryRecommendation component
+import InjuryRecommendation from './components/InjuryRecommendation';
 
 function App() {
-    const [currentPage, setCurrentPage] = useState('login'); // 'login', 'register', 'doctor', 'patient', 'doctorPatients', 'injuryRecommendation'
+    const [currentPage, setCurrentPage] = useState('login');
     const [currentUser, setCurrentUser] = useState(null);
 
     const handleLoginSuccess = (user) => {
         setCurrentUser(user);
-
         if (user.specialty) {
             localStorage.setItem('currentDoctor', JSON.stringify(user));
             setCurrentPage('doctor');
@@ -27,59 +26,36 @@ function App() {
         setCurrentPage('login');
     };
 
-    const handleRegister = () => {
-        setCurrentPage('register');
-    };
-
-    const handleBack = () => {
-        setCurrentPage('login');
-    };
-
-    if (currentPage === 'login') {
-        return (
+    const pages = {
+        login: (
             <LoginPage
                 handleLoginSuccess={handleLoginSuccess}
-                handleRegister={handleRegister}
-                handleBack={handleBack}
+                handleRegister={() => setCurrentPage('register')}
+                handleBack={() => setCurrentPage('login')}
             />
-        );
-    }
-
-    if (currentPage === 'register') {
-        return <RegistrationPage handleBack={handleBack} />;
-    }
-
-    if (currentPage === 'doctor') {
-        return (
+        ),
+        register: (
+            <RegistrationPage handleBack={() => setCurrentPage('login')} />
+        ),
+        doctor: (
             <DoctorDashboard
                 onLogout={handleLogout}
                 onViewPatients={() => setCurrentPage('doctorPatients')}
             />
-        );
-    }
-
-    if (currentPage === 'doctorPatients') {
-        return (
+        ),
+        doctorPatients: (
             <DoctorPatientsPage handleBack={() => setCurrentPage('doctor')} />
-        );
-    }
-
-    if (currentPage === 'patient') {
-        return (
+        ),
+        patient: (
             <PatientDashboard
                 patient={currentUser}
                 onLogout={handleLogout}
             />
-        );
-    }
+        ),
+        injuryRecommendation: <InjuryRecommendation />
+    };
 
-    if (currentPage === 'injuryRecommendation') {
-        return <InjuryRecommendation />;
-    }
-
-    return <div>Сторінка не знайдена</div>;
+    return pages[currentPage] || <div>Сторінка не знайдена</div>;
 }
 
 export default App;
-
-
