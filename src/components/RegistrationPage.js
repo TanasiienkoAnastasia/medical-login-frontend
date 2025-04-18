@@ -32,13 +32,6 @@ const Title = styled.h1`
   width: 100%;
 `;
 
-const Subtitle = styled.p`
-  color: #8e4a5a;
-  font-size: 16px;
-  text-align: center;
-  margin-bottom: 25px;
-`;
-
 const Input = styled.input`
   padding: 12px 15px;
   margin: 10px 0;

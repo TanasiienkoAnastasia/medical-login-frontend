@@ -18,10 +18,9 @@ function AppWrapper() {
     const navigate = useNavigate();
 
     const handleLoginSuccess = (user) => {
-        alert(`Успішний вхід як ${user.userType === 'doctor' ? 'doctor' : 'patient'}`);
-        setCurrentUser(user);
+        alert(`Успішний вхід як ${user.userType === 'doctor' ? 'лікар' : 'пацієнт'}`);
+
         if (user.userType === 'doctor') {
-            localStorage.setItem('currentDoctor', JSON.stringify(user));
             navigate('/doctor');
         } else {
             navigate('/patient');
@@ -29,8 +28,7 @@ function AppWrapper() {
     };
 
     const handleLogout = () => {
-        setCurrentUser(null);
-        localStorage.removeItem('currentDoctor');
+        localStorage.removeItem('token');
         navigate('/login');
     };
 
@@ -47,7 +45,7 @@ function AppWrapper() {
             <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => navigate('/doctor')} />} />
             <Route path="/patient" element={<PatientDashboard patient={currentUser} onLogout={handleLogout} />} />
             <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="*" element={<div>Сторінка не знайдена</div>} />
+            <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
     );
 }

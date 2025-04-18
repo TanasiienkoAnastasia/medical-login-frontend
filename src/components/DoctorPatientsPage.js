@@ -77,6 +77,7 @@ const DoctorPatientsPage = ({ handleBack }) => {
     const [search, setSearch] = useState('');
 
     useEffect(() => {
+        // TODO load patients of this doctor from API
         const stored = JSON.parse(localStorage.getItem('patients') || '[]');
         setPatients(stored);
     }, []);

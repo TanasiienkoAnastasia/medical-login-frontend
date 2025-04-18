@@ -22,14 +22,11 @@ const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
                 password
             });
 
-            console.log(response)
-
             const {
                 access_token,
                 user
             } = response.data.data;
 
-            console.log(access_token, user)
             localStorage.setItem('token', access_token);
             handleLoginSuccess(user);
         } catch (err) {

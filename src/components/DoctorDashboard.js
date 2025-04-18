@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { jwtDecode } from "jwt-decode";
+
 
 const Navbar = styled.div`
   width: 100%;
@@ -118,36 +120,34 @@ const CloseButton = styled.button`
 
 const DoctorDashboard = ({ onLogout, onViewPatients }) => {
     const [showModal, setShowModal] = useState(false);
-    const [doctor, setDoctor] = useState({ name: '', image: '' });
+    const [doctor, setDoctor] = useState({ name: '' });
 
     useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem('currentDoctor'));
-        if (saved) {
-            setDoctor(saved);
+        const token = localStorage.getItem('token');
+        if (token) {
+            const decoded = jwtDecode(token);
+            const username = decoded.name;
+
+            setDoctor({ name: username });
         }
     }, []);
-
-    const handleLogout = () => {
-        localStorage.removeItem('currentDoctor');
-        onLogout();
-    };
 
     return (
         <>
             <Navbar>
-                <NavTitle>👨‍⚕️ Лікар: {doctor.name || 'Невідомий'}</NavTitle>
+                <NavTitle>👨‍⚕️ Лікар: {doctor.name }</NavTitle>
                 <NavActions>
                     <NavButton onClick={onViewPatients}>Пацієнти</NavButton>
                     <NavButton onClick={() => setShowModal(true)}>Про лікарню</NavButton>
-                    <NavButton onClick={handleLogout}>Вийти</NavButton>
+                    <NavButton onClick={onLogout}>Вийти</NavButton>
                 </NavActions>
             </Navbar>
 
             <Container>
-                <Title>Управляйте прийомами ваших пацієнтів</Title>
+                <Title>Керуйте прийомами ваших пацієнтів</Title>
 
                 <DoctorImage
-                    src={doctor.image || 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'}
+                    src='https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'
                     alt="Doctor"
                 />
 

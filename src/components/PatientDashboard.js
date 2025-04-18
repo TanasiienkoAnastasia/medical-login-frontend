@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { FaSignOutAlt, FaPlus, FaEdit, FaSave, FaTrash } from 'react-icons/fa';
 
-// Styled components
 const Container = styled.div`
   background: linear-gradient(135deg, #ffe4ec, #ffd6e3);
   min-height: 100vh;
@@ -232,12 +231,8 @@ const PatientDashboard = ({ patient, onLogout }) => {
         setAppointments(updatedAppointments);
         setEditingAppointment(null);
 
-        const patients = JSON.parse(localStorage.getItem('patients') || '[]');
-        const updatedPatients = patients.map((p) =>
-            p.email === patient.email ? { ...p, appointments: updatedAppointments } : p
-        );
-        localStorage.setItem('patients', JSON.stringify(updatedPatients));
-        localStorage.setItem('currentUser', JSON.stringify({ ...patient, appointments: updatedAppointments }));
+        // TODO send updated appointments of current patient to backend API
+
         setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
     };
 
