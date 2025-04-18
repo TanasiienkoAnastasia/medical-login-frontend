@@ -11,13 +11,12 @@ import {
 } from './DoctorPatientsPage.styles';
 
 const DoctorPatientsPage = ({ handleBack }) => {
-    const [patients, setPatients] = useState([]);
+    const [patients] = useState([]);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         // TODO load patients of this doctor from API
-        const stored = JSON.parse(localStorage.getItem('patients') || '[]');
-        setPatients(stored);
+        // use setPatients()
     }, []);
 
     const filtered = patients.filter(p =>
