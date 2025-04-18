@@ -138,19 +138,45 @@ const PatientDashboard = ({ onLogout }) => {
         });
     };
 
-    const handleSaveAppointment = () => {
-        const updatedAppointments = [...appointments];
-        updatedAppointments[editingAppointment] = {
-            ...updatedAppointments[editingAppointment],
-            ...form,
+    const handleSaveAppointment = async () => {
+        const appointmentToUpdate = appointments[editingAppointment];
+        const token = localStorage.getItem('token');
+
+        const updatedData = {
+            date: form.date,
+            time: form.time,
+            complaint: form.complaint,
+            doctor_id: form.doctor,
         };
-        setAppointments(updatedAppointments);
-        setEditingAppointment(null);
 
-        // TODO send request to API to update given appointment
+        try {
+            await axios.put(
+                `http://127.0.0.1:8000/appointments/${appointmentToUpdate.id}`,
+                updatedData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    }
+                }
+            );
 
-        setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+            const updatedAppointments = [...appointments];
+            updatedAppointments[editingAppointment] = {
+                ...updatedAppointments[editingAppointment],
+                ...updatedData
+            };
+
+            setAppointments(updatedAppointments);
+            setEditingAppointment(null);
+            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+            alert('Прийом оновлено');
+        } catch (error) {
+            console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
+            alert('Не вдалося оновити прийом');
+        }
     };
+
 
     const handleCancelAppointment = async (index) => {
         const appointment = appointments[index];
