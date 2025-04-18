@@ -12,7 +12,6 @@ import RegistrationPage from './components/RegistrationPage';
 import DoctorDashboard from './components/DoctorDashboard';
 import DoctorPatientsPage from './components/DoctorPatientsPage';
 import PatientDashboard from './components/PatientDashboard';
-import InjuryRecommendation from './components/InjuryRecommendation';
 
 function AppWrapper() {
     const [currentUser, setCurrentUser] = useState(null);
@@ -48,7 +47,6 @@ function AppWrapper() {
             <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
             <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => navigate('/doctor')} />} />
             <Route path="/patient" element={<PatientDashboard patient={currentUser} onLogout={handleLogout} />} />
-            <Route path="/recommendation" element={<InjuryRecommendation />} />
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="*" element={<div>Сторінка не знайдена</div>} />
         </Routes>
