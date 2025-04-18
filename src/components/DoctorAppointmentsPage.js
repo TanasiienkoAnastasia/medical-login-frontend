@@ -26,9 +26,9 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
 
     return (
         <Container>
-            <Title>Список пацієнтів</Title>
+            <Title>Список прийомів</Title>
             <SearchInput
-                placeholder="Пошук пацієнта або скарги"
+                placeholder="Пошук прийому"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
             />

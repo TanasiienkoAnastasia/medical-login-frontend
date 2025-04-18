@@ -14,7 +14,7 @@ import {
     CloseButton
 } from './DoctorDashboard.styles';
 
-const DoctorDashboard = ({ onLogout, onViewPatients }) => {
+const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
     const [showModal, setShowModal] = useState(false);
     const [doctor, setDoctor] = useState({ name: '' });
 
@@ -33,7 +33,7 @@ const DoctorDashboard = ({ onLogout, onViewPatients }) => {
             <Navbar>
                 <NavTitle>👨‍⚕️ Лікар: {doctor.name }</NavTitle>
                 <NavActions>
-                    <NavButton onClick={onViewPatients}>Пацієнти</NavButton>
+                    <NavButton onClick={onViewAppointments}>Прийоми</NavButton>
                     <NavButton onClick={() => setShowModal(true)}>Про лікарню</NavButton>
                     <NavButton onClick={onLogout}>Вийти</NavButton>
                 </NavActions>
