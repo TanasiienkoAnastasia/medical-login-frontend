@@ -21,7 +21,7 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5000/login', {
+            const response = await axios.post('http://127.0.0.1:8000/auth/login', {
                 email,
                 password
             });
