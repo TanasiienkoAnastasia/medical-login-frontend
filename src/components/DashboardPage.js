@@ -1,4 +1,3 @@
-// src/components/DashboardPage.jsx
 import React from 'react';
 import DoctorDashboard from './DoctorDashboard';
 import PatientDashboard from './PatientDashboard';

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
+import axios from 'axios';
 
 const fadeIn = keyframes`
   from { opacity: 0; transform: translateY(20px); }
@@ -110,28 +111,20 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
 
-        const key = role === 'doctor' ? 'doctors' : 'patients';
+        try {
+            const response = await axios.post('http://localhost:5000/login', {
+                email,
+                password
+            });
 
-        // TODO get logged in user from backend
-        const users = JSON.parse(localStorage.getItem(key) || '[]'); // remove
-        const user = users.find(u => u.email === email && u.password === password); // remove
-
-        if (user) {
-            alert(`Успішний вхід як ${role === 'doctor' ? 'лікар' : 'пацієнт'}`);
-
-            if (role === 'doctor') {
-                localStorage.setItem('currentDoctor', JSON.stringify({
-                    name: user.name,
-                    image: 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'
-                }));
-            }
-
+            const { token, user } = response.data;
+            localStorage.setItem('token', token);
             handleLoginSuccess(user);
-        } else {
-            alert('Невірний email або пароль');
+        } catch (err) {
+            alert(err.response?.data?.message || 'Помилка при вході');
         }
     };
 
