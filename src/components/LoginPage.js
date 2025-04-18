@@ -30,8 +30,6 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
 
             const {
                 access_token,
-                refresh_token,
-                access_expires,
                 user
             } = response.data.data;
 
@@ -47,15 +45,6 @@ const LoginPage = ({ handleRegister, handleBack, handleLoginSuccess }) => {
         <Container>
             <Card>
                 <Title>Вхід до системи</Title>
-
-                <RoleSwitcher>
-                    <RoleButton active={role === 'patient'} onClick={() => setRole('patient')}>
-                        Пацієнт
-                    </RoleButton>
-                    <RoleButton active={role === 'doctor'} onClick={() => setRole('doctor')}>
-                        Лікар
-                    </RoleButton>
-                </RoleSwitcher>
 
                 <form onSubmit={handleLogin}>
                     <Input

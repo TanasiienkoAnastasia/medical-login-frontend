@@ -146,7 +146,6 @@ const CancelButton = styled.button`
   }
 `;
 
-// Injury Recommendation logic (same as before)
 const InjuryRecommendation = ({ injuryType, setDoctors }) => {
     const doctors = [
         { id: 1, name: 'Іван Петрович', specialty: 'травматолог', rating: 4.5 },
@@ -159,7 +158,6 @@ const InjuryRecommendation = ({ injuryType, setDoctors }) => {
         'перелом': ['травматолог', 'ортопед'],
         'вивих': ['травматолог', 'ортопед'],
         'розтягнення': ['травматолог'],
-        // Add more injuries here...
     };
 
     useEffect(() => {

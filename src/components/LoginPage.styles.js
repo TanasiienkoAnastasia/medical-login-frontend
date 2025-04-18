@@ -46,28 +46,6 @@ export const Input = styled.input`
   }
 `;
 
-export const RoleSwitcher = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 20px 0;
-`;
-
-export const RoleButton = styled.button`
-  background-color: ${props => props.active ? '#f783ac' : '#f8f0f3'};
-  color: ${props => props.active ? 'white' : '#6c757d'};
-  padding: 10px 20px;
-  border-radius: 20px;
-  border: none;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.3s;
-
-  &:hover {
-    background-color: ${props => props.active ? '#e85a9a' : '#f3e1e8'};
-  }
-`;
-
 export const SubmitButton = styled.button`
   width: 100%;
   background-color: #e64980;
