@@ -14,11 +14,9 @@ function App() {
         setCurrentUser(user);
 
         if (user.specialty) {
-            // Це лікар
             localStorage.setItem('currentDoctor', JSON.stringify(user));
             setCurrentPage('doctor');
         } else {
-            // Це пацієнт
             setCurrentPage('patient');
         }
     };
@@ -36,8 +34,6 @@ function App() {
     const handleBack = () => {
         setCurrentPage('login');
     };
-
-    // === РОУТИНГ ===
 
     if (currentPage === 'login') {
         return (
