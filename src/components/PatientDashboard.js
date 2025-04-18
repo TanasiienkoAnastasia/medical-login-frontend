@@ -106,7 +106,7 @@ const PatientDashboard = ({ onLogout }) => {
 
         const token = localStorage.getItem('token');
         try {
-            await axios.post(
+            const response = await axios.post(
                 'http://127.0.0.1:8000/appointments',
                 newAppointment,
                 {
@@ -118,7 +118,7 @@ const PatientDashboard = ({ onLogout }) => {
             );
 
             alert('Прийом створено');
-            // TODO: optionally update appointment list if you display it
+            setAppointments([...appointments, response.data.data])
             setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
