@@ -18,8 +18,8 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = localStorage.getItem('token'); // якщо потрібно
-                const response = await axios.get('http://localhost:5000/appointments', {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://localhost:5000/doctor/appointments', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaSignOutAlt, FaPlus, FaEdit, FaSave, FaTrash } from 'react-icons/fa';
+import { jwtDecode } from "jwt-decode";
 import {
     Container,
     Card,
@@ -15,6 +16,7 @@ import {
     SaveButton,
     CancelButton
 } from './PatientDashboard.styles';
+import axios from "axios";
 
 // TODO should be moved to backend
 // TODO add doctor rating to backend???
@@ -51,14 +53,39 @@ const PatientDashboard = ({ onLogout }) => {
     const [patient, setPatient] = useState({});
 
     useEffect(() => {
-        // TODO set current patient to state
-        // use setPatient()
+        const token = localStorage.getItem('token');
+        const decoded = jwtDecode(token);
+        setPatient(decoded.user);
 
-        // TODO load and set collection of current patient appointments
-        // use setAppointments()
+        const fetchAppointmentsData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://127.0.0.1:8000/patient/appointments', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setAppointments(response.data.data);
+            } catch (err) {
+                alert(err.message || 'Помилка при отриманні даних');
+            }
+        }
+        const fetchDoctorsData = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const response = await axios.get('http://127.0.0.1:8000/doctors', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setDoctors(response.data.data);
+            } catch (err) {
+                alert(err.message || 'Помилка при отриманні даних');
+            }
+        }
 
-        // TODO load list of all available doctors
-        // use setDoctors()
+        fetchAppointmentsData();
+        fetchDoctorsData();
     }, []);
 
     const handleChange = (e) => {
