@@ -9,7 +9,7 @@ import {
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import DoctorDashboard from './components/DoctorDashboard';
-import DoctorPatientsPage from './components/DoctorPatientsPage';
+import DoctorAppointmentsPage from './components/DoctorAppointmentsPage';
 import PatientDashboard from './components/PatientDashboard';
 
 function AppWrapper() {
@@ -37,7 +37,7 @@ function AppWrapper() {
             <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
             <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
             <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
-            <Route path="/doctor/patients" element={<DoctorPatientsPage handleBack={() => navigate('/doctor')} />} />
+            <Route path="/doctor/patients" element={<DoctorAppointmentsPage handleBack={() => navigate('/doctor')} />} />
             <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
             <Route path="/" element={<Navigate to="/login" />} />
             <Route path="*" element={<Navigate to="/login" />} />

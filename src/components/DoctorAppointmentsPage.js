@@ -8,20 +8,20 @@ import {
     Td,
     Status,
     BackButton
-} from './DoctorPatientsPage.styles';
+} from './DoctorAppointmentsPage.styles';
 
-const DoctorPatientsPage = ({ handleBack }) => {
-    const [patients] = useState([]);
+const DoctorAppointmentsPage = ({ handleBack }) => {
+    const [appointments, setAppointments] = useState([]);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        // TODO load patients of this doctor from API
-        // use setPatients()
+        // TODO load appointments of this doctor from API
+        // use setAppointments()
     }, []);
 
-    const filtered = patients.filter(p =>
-        p.name.toLowerCase().includes(search.toLowerCase()) ||
-        (p.appointments?.[0]?.complaint || '').toLowerCase().includes(search.toLowerCase())
+    const filtered = appointments.filter(a =>
+        a.patient.name.toLowerCase().includes(search.toLowerCase()) ||
+        (a?.complaint || '').toLowerCase().includes(search.toLowerCase())
     );
 
     return (
@@ -45,14 +45,14 @@ const DoctorPatientsPage = ({ handleBack }) => {
                 </tr>
                 </thead>
                 <tbody>
-                {filtered.map((p, i) => (
+                {filtered.map((a, i) => (
                     <tr key={i}>
-                        <Td>{p.name}</Td>
-                        <Td>{p.age}</Td>
-                        <Td>{p.appointments?.[0]?.complaint || '-'}</Td>
-                        <Td>{p.appointments?.[0]?.date || '-'}</Td>
-                        <Td>{p.appointments?.[0]?.time || '-'}</Td>
-                        <Td><Status status={p.appointments?.[0]?.status}>{p.appointments?.[0]?.status}</Status></Td>
+                        <Td>{a.patient.name}</Td>
+                        <Td>{a.patient.age}</Td>
+                        <Td>{a?.complaint || '-'}</Td>
+                        <Td>{a?.date || '-'}</Td>
+                        <Td>{a?.time || '-'}</Td>
+                        <Td><Status status={a.status}>{a.status}</Status></Td>
                     </tr>
                 ))}
                 </tbody>
@@ -65,4 +65,4 @@ const DoctorPatientsPage = ({ handleBack }) => {
     );
 };
 
-export default DoctorPatientsPage;
+export default DoctorAppointmentsPage;
