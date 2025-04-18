@@ -9,14 +9,28 @@ import {
     Status,
     BackButton
 } from './DoctorAppointmentsPage.styles';
+import axios from "axios";
 
 const DoctorAppointmentsPage = ({ handleBack }) => {
     const [appointments, setAppointments] = useState([]);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
-        // TODO load appointments of this doctor from API
-        // use setAppointments()
+        const fetchData = async () => {
+            try {
+                const token = localStorage.getItem('token'); // якщо потрібно
+                const response = await axios.get('http://localhost:5000/appointments', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setAppointments(response.data.data);
+            } catch (err) {
+                alert(err.message || 'Помилка при отриманні даних');
+            }
+        }
+
+        fetchData();
     }, []);
 
     const filtered = appointments.filter(a =>
