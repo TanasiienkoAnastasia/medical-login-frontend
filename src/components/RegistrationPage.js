@@ -29,14 +29,34 @@ const RegistrationPage = ({ handleBack }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (
-            !formData.name ||
-            !formData.email ||
-            !formData.password ||
-            (userType === 'doctor' && !formData.specialty) ||
-            (userType === 'patient' && !formData.phone) // Validate phone for patients
-        ) {
-            alert('Будь ласка, заповніть усі поля.');
+        const errors = [];
+
+        if (!formData.name || formData.name.length < 2) {
+            errors.push("Ім'я повинно містити щонайменше 2 символи.");
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!formData.email || !emailRegex.test(formData.email)) {
+            errors.push("Некоректний формат email.");
+        }
+
+        if (!formData.password || formData.password.length < 6) {
+            errors.push("Пароль повинен містити щонайменше 6 символів.");
+        }
+
+        if (userType === 'doctor' && !formData.specialty.trim()) {
+            errors.push("Поле спеціальність є обовʼязковим для лікарів.");
+        }
+
+        if (userType === 'patient') {
+            const phoneValid = formData.phone.length >= 7 && formData.phone.length <= 20;
+            if (!phoneValid) {
+                errors.push("Номер телефону повинен містити від 7 до 20 цифр.");
+            }
+        }
+
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
             return;
         }
 
@@ -54,8 +74,7 @@ const RegistrationPage = ({ handleBack }) => {
             await axios.post('http://127.0.0.1:8000/auth/register', newUser);
             alert('Реєстрація успішна');
             handleBack();
-        }
-        catch (error) {
+        } catch (error) {
             const data = error.response?.data;
 
             if (data?.errors && typeof data.errors === 'object') {
@@ -69,6 +88,7 @@ const RegistrationPage = ({ handleBack }) => {
             }
         }
     };
+
 
     return (
         <Container>
