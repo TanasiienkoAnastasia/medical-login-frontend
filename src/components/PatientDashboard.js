@@ -92,7 +92,7 @@ const PatientDashboard = ({ onLogout }) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleAddAppointment = (e) => {
+    const handleAddAppointment = async (e) => {
         e.preventDefault();
         if (!form.date || !form.time || !form.complaint || !form.doctor) return alert('Заповніть усі поля');
 
@@ -104,9 +104,26 @@ const PatientDashboard = ({ onLogout }) => {
             status: 'очікується',
         };
 
-        // TODO send API request to create new appointment for current patient
+        const token = localStorage.getItem('token');
+        try {
+            await axios.post(
+                'http://127.0.0.1:8000/appointments',
+                newAppointment,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
 
-        setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+            alert('Прийом створено');
+            // TODO: optionally update appointment list if you display it
+            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+        } catch (error) {
+            console.error('Помилка при створенні прийому:', error.response?.data || error.message);
+            alert(error.response?.data?.message || 'Не вдалося створити прийом');
+        }
     };
 
     const handleEditAppointment = (index) => {
