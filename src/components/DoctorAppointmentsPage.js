@@ -63,9 +63,9 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                     <tr key={i}>
                         <Td>{a.patient.name}</Td>
                         <Td>{a.patient.age}</Td>
-                        <Td>{a?.complaint || '-'}</Td>
-                        <Td>{a?.date || '-'}</Td>
-                        <Td>{a?.time || '-'}</Td>
+                        <Td>{a.complaint || '-'}</Td>
+                        <Td>{a.date || '-'}</Td>
+                        <Td>{a.time || '-'}</Td>
                         <Td><Status status={a.status}>{a.status}</Status></Td>
                     </tr>
                 ))}
