@@ -54,7 +54,7 @@ const PatientDashboard = ({ onLogout }) => {
                 const response = await axios.get(`http://127.0.0.1:8000/recommendations?injury=${form.injuryType}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                setDoctors(response.data.data);
+                setDoctors(response.data.data ?? []);
             } catch (err) {
                 console.error('Не вдалося отримати рекомендації лікарів', err);
             }
