@@ -28,7 +28,7 @@ const PatientDashboard = ({ onLogout }) => {
     useEffect(() => {
         const token = localStorage.getItem('token');
         const decoded = jwtDecode(token);
-        setPatient(decoded.user);
+        setPatient(decoded);
 
         const fetchAppointmentsData = async () => {
             try {
@@ -37,7 +37,7 @@ const PatientDashboard = ({ onLogout }) => {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                setAppointments(response.data.data);
+                setAppointments(response.data.data ?? []);
             } catch (err) {
                 alert(err.message || 'Помилка при отриманні даних');
             }
@@ -189,7 +189,7 @@ const PatientDashboard = ({ onLogout }) => {
     return (
         <Container>
             <Card>
-                <Title>👤 Пацієнт: {patient.name}</Title>
+                <Title>👤 Пацієнт: {patient?.userName ?? ''}</Title>
 
                 <h3 style={{ marginTop: '20px', color: '#6b2737' }}>📅 Новий прийом</h3>
                 <Form onSubmit={handleAddAppointment}>
