@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useLoading } from '../context/LoadingContext';
 import {
     Container,
     Title,
@@ -14,10 +15,13 @@ import axios from "axios";
 const DoctorAppointmentsPage = ({ handleBack }) => {
     const [appointments, setAppointments] = useState([]);
     const [search, setSearch] = useState('');
+    const { setLoading } = useLoading();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+                setLoading(true);
+
                 const token = localStorage.getItem('token');
                 const response = await axios.get('http://127.0.0.1:8000/doctor/appointments', {
                     headers: {
@@ -27,6 +31,8 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                 setAppointments(response.data.data);
             } catch (err) {
                 alert(err.message || 'Помилка при отриманні даних');
+            } finally {
+                setLoading(false);
             }
         }
 

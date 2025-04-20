@@ -11,6 +11,8 @@ import RegistrationPage from './components/RegistrationPage';
 import DoctorDashboard from './components/DoctorDashboard';
 import DoctorAppointmentsPage from './components/DoctorAppointmentsPage';
 import PatientDashboard from './components/PatientDashboard';
+import {LoadingProvider} from "./context/LoadingContext";
+import GlobalSpinner from "./components/GlobalSpinner";
 
 function AppWrapper() {
     const navigate = useNavigate();
@@ -33,15 +35,18 @@ function AppWrapper() {
     };
 
     return (
-        <Routes>
-            <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
-            <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
-            <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
-            <Route path="/doctor/patients" element={<DoctorAppointmentsPage handleBack={() => navigate('/doctor')} />} />
-            <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
-            <Route path="/" element={<Navigate to="/login" />} />
-            <Route path="*" element={<Navigate to="/login" />} />
-        </Routes>
+        <LoadingProvider>
+            <GlobalSpinner />
+            <Routes>
+                <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
+                <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
+                <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
+                <Route path="/doctor/patients" element={<DoctorAppointmentsPage handleBack={() => navigate('/doctor')} />} />
+                <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
+                <Route path="/" element={<Navigate to="/login" />} />
+                <Route path="*" element={<Navigate to="/login" />} />
+            </Routes>
+        </LoadingProvider>
     );
 }
 
