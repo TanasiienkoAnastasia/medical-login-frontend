@@ -83,7 +83,7 @@ const PatientDashboard = ({ onLogout }) => {
         const token = localStorage.getItem('token');
         try {
             const response = await axios.post(
-                'http://127.0.0.1:8000/appointments',
+                'http://127.0.0.1:8000/patient/appointments',
                 newAppointment,
                 {
                     headers: {
@@ -127,7 +127,7 @@ const PatientDashboard = ({ onLogout }) => {
 
         try {
             await axios.put(
-                `http://127.0.0.1:8000/appointments/${appointmentToUpdate.id}`,
+                `http://127.0.0.1:8000/patient/appointments/${appointmentToUpdate.id}`,
                 updatedData,
                 {
                     headers: {
@@ -160,7 +160,7 @@ const PatientDashboard = ({ onLogout }) => {
 
         try {
             await axios.put(
-                `http://127.0.0.1:8000/appointments/${appointment.id}`,
+                `http://127.0.0.1:8000/patient/appointments/${appointment.id}`,
                 { status: 'скасовано' },
                 {
                     headers: {
@@ -263,7 +263,7 @@ const PatientDashboard = ({ onLogout }) => {
                             <option value="">Оберіть лікаря</option>
                             {doctors.map((doctor, index) => (
                                 <option key={index} value={doctor.id}>
-                                    {doctor.username} ({doctor.specialty})
+                                    {doctor.name} ({doctor.specialty})
                                 </option>
                             ))}
                         </Select>
