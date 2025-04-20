@@ -15,6 +15,7 @@ const RegistrationPage = ({ handleBack }) => {
         name: '',
         email: '',
         password: '',
+        age: '',
         specialty: '',
         phone: '',
     });
@@ -44,6 +45,10 @@ const RegistrationPage = ({ handleBack }) => {
             errors.push("Пароль повинен містити щонайменше 6 символів.");
         }
 
+        if (!formData.age || isNaN(formData.age) || formData.age < 0 || formData.age > 120) {
+            errors.push("Вік повинен бути числом від 0 до 120.");
+        }
+
         if (userType === 'doctor' && !formData.specialty.trim()) {
             errors.push("Поле спеціальність є обовʼязковим для лікарів.");
         }
@@ -65,6 +70,7 @@ const RegistrationPage = ({ handleBack }) => {
             email: formData.email,
             password: formData.password,
             userType: userType,
+            age: Number(formData.age),
             ...(userType === 'doctor'
                 ? { specialty: formData.specialty }
                 : { phone: formData.phone })
@@ -88,7 +94,6 @@ const RegistrationPage = ({ handleBack }) => {
             }
         }
     };
-
 
     return (
         <Container>
@@ -116,6 +121,14 @@ const RegistrationPage = ({ handleBack }) => {
                         name="password"
                         placeholder="Пароль"
                         value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                    <Input
+                        type="number"
+                        name="age"
+                        placeholder="Вік"
+                        value={formData.age}
                         onChange={handleChange}
                         required
                     />
