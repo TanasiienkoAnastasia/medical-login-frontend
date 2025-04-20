@@ -34,7 +34,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
     }, []);
 
     const filtered = appointments.filter(a =>
-        a.patient.name.toLowerCase().includes(search.toLowerCase()) ||
+        a.patient.username.toLowerCase().includes(search.toLowerCase()) ||
         (a?.complaint || '').toLowerCase().includes(search.toLowerCase())
     );
 
