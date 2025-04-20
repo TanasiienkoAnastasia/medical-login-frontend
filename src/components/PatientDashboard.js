@@ -75,8 +75,9 @@ const PatientDashboard = ({ onLogout }) => {
             date: form.date,
             time: form.time,
             complaint: form.complaint,
-            doctor: form.doctor,
-            status: 'очікується',
+            doctor_id: parseInt(form.doctor),
+            patient_id: patient.id,
+            status: 'scheduled'
         };
 
         const token = localStorage.getItem('token');
@@ -93,7 +94,7 @@ const PatientDashboard = ({ onLogout }) => {
             );
 
             alert('Прийом створено');
-            setAppointments([...appointments, response.data.data])
+            setAppointments([...appointments, response.data.data]);
             setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
@@ -108,8 +109,8 @@ const PatientDashboard = ({ onLogout }) => {
             date: appointment.date,
             time: appointment.time,
             complaint: appointment.complaint,
-            doctor: appointment.doctor,
-            injuryType: appointment.injuryType,
+            doctor: appointment.doctor.id,
+            injuryType: ''
         });
     };
 
@@ -121,7 +122,7 @@ const PatientDashboard = ({ onLogout }) => {
             date: form.date,
             time: form.time,
             complaint: form.complaint,
-            doctor_id: form.doctor,
+            doctor_id: parseInt(form.doctor),
         };
 
         try {
@@ -139,7 +140,8 @@ const PatientDashboard = ({ onLogout }) => {
             const updatedAppointments = [...appointments];
             updatedAppointments[editingAppointment] = {
                 ...updatedAppointments[editingAppointment],
-                ...updatedData
+                ...updatedData,
+                doctor: doctors.find(d => d.id === parseInt(form.doctor)) || updatedAppointments[editingAppointment].doctor
             };
 
             setAppointments(updatedAppointments);
@@ -206,7 +208,6 @@ const PatientDashboard = ({ onLogout }) => {
                         <option value="перелом">Перелом</option>
                         <option value="вивих">Вивих</option>
                         <option value="розтягнення">Розтягнення</option>
-                        {/* Add more injuries */}
                     </Select>
 
                     <Label>Лікар</Label>
@@ -214,7 +215,7 @@ const PatientDashboard = ({ onLogout }) => {
                         <option value="">Оберіть лікаря</option>
                         {doctors.map((doctor, index) => (
                             <option key={index} value={doctor.id}>
-                                {doctor.name} ({doctor.specialty})
+                                {doctor.username} ({doctor.specialty})
                             </option>
                         ))}
                     </Select>
@@ -231,7 +232,7 @@ const PatientDashboard = ({ onLogout }) => {
                             <strong>Дата:</strong> {app.date}<br />
                             <strong>Час:</strong> {app.time}<br />
                             <strong>Скарга:</strong> {app.complaint}<br />
-                            <strong>Лікар:</strong> {app.doctor}<br />
+                            <strong>Лікар:</strong> {app.doctor.username} ({app.doctor.specialty})<br />
                             <strong>Статус:</strong>{' '}
                             <span style={{ color: app.status === 'скасовано' ? '#b10000' : '#2b7a2b' }}>
                                 {app.status}
@@ -262,7 +263,7 @@ const PatientDashboard = ({ onLogout }) => {
                             <option value="">Оберіть лікаря</option>
                             {doctors.map((doctor, index) => (
                                 <option key={index} value={doctor.id}>
-                                    {doctor.name} ({doctor.specialty})
+                                    {doctor.username} ({doctor.specialty})
                                 </option>
                             ))}
                         </Select>
