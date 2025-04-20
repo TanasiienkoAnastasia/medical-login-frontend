@@ -18,33 +18,6 @@ import {
 } from './PatientDashboard.styles';
 import axios from "axios";
 
-// TODO should be moved to backend
-// TODO add doctor rating to backend???
-const InjuryRecommendation = ({ injuryType, setDoctors }) => {
-    const doctors = [
-        { id: 1, name: 'Іван Петрович', specialty: 'травматолог', rating: 4.5 },
-        { id: 2, name: 'Марія Олексіївна', specialty: 'ортопед', rating: 4.8 },
-        { id: 3, name: 'Анна Володимирівна', specialty: 'хірург', rating: 4.2 },
-        // Add other doctors here...
-    ];
-
-    const injurySpecialties = {
-        'перелом': ['травматолог', 'ортопед'],
-        'вивих': ['травматолог', 'ортопед'],
-        'розтягнення': ['травматолог'],
-    };
-
-    useEffect(() => {
-        const selectedSpecialties = injurySpecialties[injuryType] || [];
-        const recommendedDoctors = doctors.filter(doctor =>
-            selectedSpecialties.includes(doctor.specialty)
-        );
-        setDoctors(recommendedDoctors);
-    }, [doctors, injurySpecialties, injuryType, setDoctors]);
-
-    return null;
-};
-
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
     const [form, setForm] = useState({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
@@ -59,7 +32,6 @@ const PatientDashboard = ({ onLogout }) => {
 
         const fetchAppointmentsData = async () => {
             try {
-                const token = localStorage.getItem('token');
                 const response = await axios.get('http://127.0.0.1:8000/patient/appointments', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -70,23 +42,26 @@ const PatientDashboard = ({ onLogout }) => {
                 alert(err.message || 'Помилка при отриманні даних');
             }
         }
-        const fetchDoctorsData = async () => {
+
+        fetchAppointmentsData();
+    }, []);
+
+    useEffect(() => {
+        const fetchRecommendedDoctors = async () => {
+            if (!form.injuryType) return;
             try {
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://127.0.0.1:8000/doctors', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+                const response = await axios.get(`http://127.0.0.1:8000/recommendations?injury=${form.injuryType}`, {
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setDoctors(response.data.data);
             } catch (err) {
-                alert(err.message || 'Помилка при отриманні даних');
+                console.error('Не вдалося отримати рекомендації лікарів', err);
             }
         }
 
-        fetchAppointmentsData();
-        fetchDoctorsData();
-    }, []);
+        fetchRecommendedDoctors();
+    }, [form.injuryType]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -177,7 +152,6 @@ const PatientDashboard = ({ onLogout }) => {
         }
     };
 
-
     const handleCancelAppointment = async (index) => {
         const appointment = appointments[index];
         const token = localStorage.getItem('token');
@@ -235,14 +209,12 @@ const PatientDashboard = ({ onLogout }) => {
                         {/* Add more injuries */}
                     </Select>
 
-                    <InjuryRecommendation injuryType={form.injuryType} setDoctors={setDoctors} />
-
                     <Label>Лікар</Label>
                     <Select name="doctor" value={form.doctor} onChange={handleChange} required>
                         <option value="">Оберіть лікаря</option>
                         {doctors.map((doctor, index) => (
-                            <option key={index} value={doctor.name}>
-                                {doctor.name}
+                            <option key={index} value={doctor.id}>
+                                {doctor.name} ({doctor.specialty})
                             </option>
                         ))}
                     </Select>
@@ -262,8 +234,8 @@ const PatientDashboard = ({ onLogout }) => {
                             <strong>Лікар:</strong> {app.doctor}<br />
                             <strong>Статус:</strong>{' '}
                             <span style={{ color: app.status === 'скасовано' ? '#b10000' : '#2b7a2b' }}>
-                {app.status}
-              </span><br />
+                                {app.status}
+                            </span><br />
                             <EditButton onClick={() => handleEditAppointment(index)}>
                                 <FaEdit /> Редагувати
                             </EditButton>
@@ -289,8 +261,8 @@ const PatientDashboard = ({ onLogout }) => {
                         <Select name="doctor" value={form.doctor} onChange={handleChange} required>
                             <option value="">Оберіть лікаря</option>
                             {doctors.map((doctor, index) => (
-                                <option key={index} value={doctor.name}>
-                                    {doctor.name}
+                                <option key={index} value={doctor.id}>
+                                    {doctor.name} ({doctor.specialty})
                                 </option>
                             ))}
                         </Select>
@@ -309,12 +281,3 @@ const PatientDashboard = ({ onLogout }) => {
 };
 
 export default PatientDashboard;
-
-
-
-
-
-
-
-
-
