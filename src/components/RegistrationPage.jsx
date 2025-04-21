@@ -11,6 +11,10 @@ import {
 } from './RegistrationPage.styles';
 import { useLoading } from '../context/LoadingContext';
 import API_BASE_URL from "../config/api";
+import InputMask from 'react-input-mask';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
+
 
 const RegistrationPage = ({ handleBack }) => {
     const [formData, setFormData] = useState({
@@ -57,7 +61,8 @@ const RegistrationPage = ({ handleBack }) => {
         }
 
         if (userType === 'patient') {
-            const phoneValid = formData.phone.length >= 7 && formData.phone.length <= 20;
+            const digitsOnly = formData.phone.replace(/\D/g, '');
+            const phoneValid = digitsOnly.length >= 10 && digitsOnly.length <= 12;
             if (!phoneValid) {
                 errors.push("Номер телефону повинен містити від 7 до 20 цифр.");
             }
@@ -169,15 +174,18 @@ const RegistrationPage = ({ handleBack }) => {
                     )}
 
                     {userType === 'patient' && (
-                        <Input
-                            type="tel"
-                            name="phone"
-                            placeholder="Номер телефону"
+                        <PhoneInput
+                            country={'ua'}
                             value={formData.phone}
-                            onChange={handleChange}
-                            required
+                            onChange={(phone) => setFormData({ ...formData, phone })}
+                            inputProps={{
+                                name: 'phone',
+                                required: true,
+                                placeholder: 'Номер телефону'
+                            }}
                         />
                     )}
+
 
                     <Button type="submit">Зареєструватися</Button>
                 </form>
