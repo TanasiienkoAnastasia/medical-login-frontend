@@ -9,6 +9,7 @@ import {
     SubmitButton,
     BottomRow
 } from './LoginPage.styles';
+import API_BASE_URL from "../config/api";
 
 const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
     const [email, setEmail] = useState('');
@@ -21,7 +22,7 @@ const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
         try {
             setLoading(true);
 
-            const response = await axios.post('http://127.0.0.1:8000/auth/login', {
+            const response = await axios.post(`${API_BASE_URL}/auth/login`, {
                 email,
                 password
             });

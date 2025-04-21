@@ -10,6 +10,7 @@ import {
     UserTypeButton
 } from './RegistrationPage.styles';
 import { useLoading } from '../context/LoadingContext';
+import API_BASE_URL from "../config/api";
 
 const RegistrationPage = ({ handleBack }) => {
     const [formData, setFormData] = useState({
@@ -81,7 +82,7 @@ const RegistrationPage = ({ handleBack }) => {
         try {
             setLoading(true);
 
-            await axios.post('http://127.0.0.1:8000/auth/register', newUser);
+            await axios.post(`${API_BASE_URL}/auth/register`, newUser);
             alert('Реєстрація успішна');
             handleBack();
         } catch (error) {

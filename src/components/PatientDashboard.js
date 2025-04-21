@@ -18,6 +18,7 @@ import {
     CancelButton
 } from './PatientDashboard.styles';
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
@@ -35,7 +36,7 @@ const PatientDashboard = ({ onLogout }) => {
         const fetchAppointmentsData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://127.0.0.1:8000/patient/appointments', {
+                const response = await axios.get(`${API_BASE_URL}/patient/appointments`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -57,7 +58,7 @@ const PatientDashboard = ({ onLogout }) => {
             try {
                 setLoading(true);
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`http://127.0.0.1:8000/recommendations?injury=${form.injuryType}`, {
+                const response = await axios.get(`${API_BASE_URL}/recommendations?injury=${form.injuryType}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDoctors(response.data.data ?? []);
@@ -93,7 +94,7 @@ const PatientDashboard = ({ onLogout }) => {
             setLoading(true);
 
             const response = await axios.post(
-                'http://127.0.0.1:8000/patient/appointments',
+                `${API_BASE_URL}/patient/appointments`,
                 newAppointment,
                 {
                     headers: {
@@ -141,7 +142,7 @@ const PatientDashboard = ({ onLogout }) => {
             setLoading(true);
 
             await axios.put(
-                `http://127.0.0.1:8000/patient/appointments/${appointmentToUpdate.id}`,
+                `${API_BASE_URL}/patient/appointments/${appointmentToUpdate.id}`,
                 updatedData,
                 {
                     headers: {
@@ -178,7 +179,7 @@ const PatientDashboard = ({ onLogout }) => {
             setLoading(true);
 
             await axios.put(
-                `http://127.0.0.1:8000/patient/appointments/${appointment.id}`,
+                `${API_BASE_URL}/patient/appointments/${appointment.id}`,
                 { status: 'скасовано' },
                 {
                     headers: {

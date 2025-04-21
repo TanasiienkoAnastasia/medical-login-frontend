@@ -11,6 +11,7 @@ import {
     BackButton
 } from './DoctorAppointmentsPage.styles';
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 const DoctorAppointmentsPage = ({ handleBack }) => {
     const [appointments, setAppointments] = useState([]);
@@ -23,7 +24,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                 setLoading(true);
 
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://127.0.0.1:8000/doctor/appointments', {
+                const response = await axios.get(`${API_BASE_URL}/doctor/appointments`, {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
