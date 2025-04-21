@@ -53,7 +53,7 @@ export const Td = styled.td`
 `;
 
 export const Status = styled.span`
-  color: ${props => props.status === 'скасовано' ? '#b10000' : '#2b7a2b'};
+  color: ${props => props.$status === 'скасовано' ? '#b10000' : '#2b7a2b'};
 `;
 
 export const BackButton = styled.button`

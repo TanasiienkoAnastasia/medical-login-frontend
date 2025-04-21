@@ -72,7 +72,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                         <Td>{a.complaint || '-'}</Td>
                         <Td>{a.date || '-'}</Td>
                         <Td>{a.time || '-'}</Td>
-                        <Td><Status status={a.status}>{a.status}</Status></Td>
+                        <Td><Status $status={a.status}>{a.status}</Status></Td>
                     </tr>
                 ))}
                 </tbody>
