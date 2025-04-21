@@ -69,7 +69,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                 <tbody>
                 {filtered.map((a, i) => (
                     <tr key={i}>
-                        <Td>{a.patient.name}</Td>
+                        <Td>{a.patient.username}</Td>
                         <Td>{a.patient.age}</Td>
                         <Td>{a.complaint || '-'}</Td>
                         <Td>{a.date || '-'}</Td>
