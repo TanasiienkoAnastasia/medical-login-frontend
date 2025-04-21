@@ -40,7 +40,8 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
         fetchData();
     }, []);
 
-    const filtered = appointments.filter(a =>
+    // TODO temporary fix to avoid page crash when there are no appointments, fix properly
+    const filtered = (appointments ?? []).filter(a =>
         a.patient.username.toLowerCase().includes(search.toLowerCase()) ||
         (a?.complaint || '').toLowerCase().includes(search.toLowerCase())
     );
