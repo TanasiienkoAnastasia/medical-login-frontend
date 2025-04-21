@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useLoading } from '../context/LoadingContext';
 import {
     Container,
     Card,
@@ -12,11 +13,14 @@ import {
 const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const { setLoading } = useLoading();
 
     const handleLogin = async (e) => {
         e.preventDefault();
 
         try {
+            setLoading(true);
+
             const response = await axios.post('http://127.0.0.1:8000/auth/login', {
                 email,
                 password
@@ -27,6 +31,8 @@ const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
             handleLoginSuccess(user, access_token);
         } catch (err) {
             alert(err.response?.data?.message || 'Помилка при вході');
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLoading } from '../context/LoadingContext';
 import { FaSignOutAlt, FaPlus, FaEdit, FaSave, FaTrash } from 'react-icons/fa';
 import { jwtDecode } from "jwt-decode";
 import {
@@ -24,6 +25,7 @@ const PatientDashboard = ({ onLogout }) => {
     const [editingAppointment, setEditingAppointment] = useState(null);
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
+    const { setLoading } = useLoading();
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -32,6 +34,7 @@ const PatientDashboard = ({ onLogout }) => {
 
         const fetchAppointmentsData = async () => {
             try {
+                setLoading(true);
                 const response = await axios.get('http://127.0.0.1:8000/patient/appointments', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -40,6 +43,8 @@ const PatientDashboard = ({ onLogout }) => {
                 setAppointments(response.data.data ?? []);
             } catch (err) {
                 alert(err.message || 'Помилка при отриманні даних');
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -50,6 +55,7 @@ const PatientDashboard = ({ onLogout }) => {
         const fetchRecommendedDoctors = async () => {
             if (!form.injuryType) return;
             try {
+                setLoading(true);
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`http://127.0.0.1:8000/recommendations?injury=${form.injuryType}`, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -57,6 +63,8 @@ const PatientDashboard = ({ onLogout }) => {
                 setDoctors(response.data.data ?? []);
             } catch (err) {
                 console.error('Не вдалося отримати рекомендації лікарів', err);
+            } finally {
+                setLoading(false);
             }
         }
 
@@ -82,6 +90,8 @@ const PatientDashboard = ({ onLogout }) => {
 
         const token = localStorage.getItem('token');
         try {
+            setLoading(true);
+
             const response = await axios.post(
                 'http://127.0.0.1:8000/patient/appointments',
                 newAppointment,
@@ -99,6 +109,8 @@ const PatientDashboard = ({ onLogout }) => {
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
             alert(error.response?.data?.message || 'Не вдалося створити прийом');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -126,6 +138,8 @@ const PatientDashboard = ({ onLogout }) => {
         };
 
         try {
+            setLoading(true);
+
             await axios.put(
                 `http://127.0.0.1:8000/patient/appointments/${appointmentToUpdate.id}`,
                 updatedData,
@@ -151,6 +165,8 @@ const PatientDashboard = ({ onLogout }) => {
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
             alert('Не вдалося оновити прийом');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -159,6 +175,8 @@ const PatientDashboard = ({ onLogout }) => {
         const token = localStorage.getItem('token');
 
         try {
+            setLoading(true);
+
             await axios.put(
                 `http://127.0.0.1:8000/patient/appointments/${appointment.id}`,
                 { status: 'скасовано' },
@@ -178,6 +196,8 @@ const PatientDashboard = ({ onLogout }) => {
         } catch (error) {
             console.error('Помилка при скасуванні прийому:', error.response?.data || error.message);
             alert('Не вдалося скасувати прийом');
+        } finally {
+            setLoading(false);
         }
     };
 

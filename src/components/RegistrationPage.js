@@ -9,6 +9,7 @@ import {
     UserTypeSelector,
     UserTypeButton
 } from './RegistrationPage.styles';
+import { useLoading } from '../context/LoadingContext';
 
 const RegistrationPage = ({ handleBack }) => {
     const [formData, setFormData] = useState({
@@ -21,6 +22,7 @@ const RegistrationPage = ({ handleBack }) => {
     });
 
     const [userType, setUserType] = useState('patient');
+    const { setLoading } = useLoading();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -77,6 +79,8 @@ const RegistrationPage = ({ handleBack }) => {
         };
 
         try {
+            setLoading(true);
+
             await axios.post('http://127.0.0.1:8000/auth/register', newUser);
             alert('Реєстрація успішна');
             handleBack();
@@ -92,6 +96,8 @@ const RegistrationPage = ({ handleBack }) => {
             } else {
                 alert(data?.message || 'Помилка при реєстрації');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
