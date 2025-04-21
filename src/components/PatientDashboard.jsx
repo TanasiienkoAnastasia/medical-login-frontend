@@ -22,7 +22,7 @@ import API_BASE_URL from "../config/api";
 
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
-    const [form, setForm] = useState({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+    const [form, setForm] = useState({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
     const [editingAppointment, setEditingAppointment] = useState(null);
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
@@ -84,6 +84,7 @@ const PatientDashboard = ({ onLogout }) => {
             date: form.date,
             time: form.time,
             complaint: form.complaint,
+            comment: form.comment,
             doctor_id: parseInt(form.doctor),
             patient_id: patient.id,
             status: 'scheduled'
@@ -106,7 +107,7 @@ const PatientDashboard = ({ onLogout }) => {
 
             alert('Прийом створено');
             setAppointments([...appointments, response.data.data]);
-            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
             alert(error.response?.data?.message || 'Не вдалося створити прийом');
@@ -122,6 +123,7 @@ const PatientDashboard = ({ onLogout }) => {
             date: appointment.date,
             time: appointment.time,
             complaint: appointment.complaint,
+            comment: appointment.comment || '',
             doctor: appointment.doctor.id,
             injuryType: ''
         });
@@ -135,6 +137,7 @@ const PatientDashboard = ({ onLogout }) => {
             date: form.date,
             time: form.time,
             complaint: form.complaint,
+            comment: form.comment,
             doctor_id: parseInt(form.doctor),
         };
 
@@ -161,7 +164,7 @@ const PatientDashboard = ({ onLogout }) => {
 
             setAppointments(updatedAppointments);
             setEditingAppointment(null);
-            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
             alert('Прийом оновлено');
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
@@ -204,7 +207,7 @@ const PatientDashboard = ({ onLogout }) => {
 
     const handleCancelEdit = () => {
         setEditingAppointment(null);
-        setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '' });
+        setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
     };
 
     return (
@@ -241,6 +244,15 @@ const PatientDashboard = ({ onLogout }) => {
                         ))}
                     </Select>
 
+                    <Label>Коментар</Label>
+                    <Input
+                        type="text"
+                        name="comment"
+                        placeholder="Коментар (необов'язково)"
+                        value={form.comment}
+                        onChange={handleChange}
+                    />
+
                     <AddButton type="submit">
                         <FaPlus /> Додати
                     </AddButton>
@@ -253,6 +265,7 @@ const PatientDashboard = ({ onLogout }) => {
                             <strong>Дата:</strong> {app.date}<br />
                             <strong>Час:</strong> {app.time}<br />
                             <strong>Скарга:</strong> {app.complaint}<br />
+                            <strong>Коментар:</strong> {app.comment || '—'}<br />
                             <strong>Лікар:</strong> {app.doctor.username} ({app.doctor.specialty})<br />
                             <strong>Статус:</strong>{' '}
                             <span style={{ color: app.status === 'скасовано' ? '#b10000' : '#2b7a2b' }}>
@@ -278,6 +291,9 @@ const PatientDashboard = ({ onLogout }) => {
 
                         <Label>Скарга</Label>
                         <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
+
+                        <Label>Коментар</Label>
+                        <Input type="text" name="comment" value={form.comment} onChange={handleChange} />
 
                         <Label>Лікар</Label>
                         <Select name="doctor" value={form.doctor} onChange={handleChange} required>
