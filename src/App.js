@@ -5,7 +5,6 @@ import {
     Navigate,
     useNavigate
 } from 'react-router-dom';
-
 import LoginPage from './components/LoginPage';
 import RegistrationPage from './components/RegistrationPage';
 import DoctorDashboard from './components/DoctorDashboard';
@@ -13,6 +12,7 @@ import DoctorAppointmentsPage from './components/DoctorAppointmentsPage';
 import PatientDashboard from './components/PatientDashboard';
 import {LoadingProvider} from "./context/LoadingContext";
 import GlobalSpinner from "./components/GlobalSpinner";
+import useAxiosInterceptor from "./hooks/useAxiosInterceptor";
 
 function AppWrapper() {
     const navigate = useNavigate();
@@ -33,6 +33,8 @@ function AppWrapper() {
         localStorage.removeItem('token');
         navigate('/login');
     };
+
+    useAxiosInterceptor();
 
     return (
         <LoadingProvider>
