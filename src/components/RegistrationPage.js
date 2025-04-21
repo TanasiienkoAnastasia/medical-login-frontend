@@ -136,14 +136,14 @@ const RegistrationPage = ({ handleBack }) => {
                     <UserTypeSelector>
                         <UserTypeButton
                             type="button"
-                            active={userType === 'patient'}
+                            $active={userType === 'patient'}
                             onClick={() => setUserType('patient')}
                         >
                             Пацієнт
                         </UserTypeButton>
                         <UserTypeButton
                             type="button"
-                            active={userType === 'doctor'}
+                            $active={userType === 'doctor'}
                             onClick={() => setUserType('doctor')}
                         >
                             Лікар

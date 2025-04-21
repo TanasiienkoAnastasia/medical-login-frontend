@@ -81,8 +81,8 @@ export const UserTypeSelector = styled.div`
 `;
 
 export const UserTypeButton = styled(Button)`
-  background-color: ${props => props.active ? '#d16b86' : '#f0f0f0'};
-  color: ${props => props.active ? 'white' : '#666'};
+  background-color: ${props => props.$active ? '#d16b86' : '#f0f0f0'};
+  color: ${props => props.$active ? 'white' : '#666'};
   flex: 1;
   margin: 0 10px;
 `;
