@@ -47,9 +47,21 @@ const PatientDashboard = ({ onLogout }) => {
             } finally {
                 setLoading(false);
             }
-        }
+        };
+
+        const fetchPatientProfile = async () => {
+            try {
+                const response = await axios.get(`${API_BASE_URL}/patient/profile`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setPatient(response.data);
+            } catch (error) {
+                console.error('Не вдалося завантажити профіль:', error);
+            }
+        };
 
         fetchAppointmentsData();
+        fetchPatientProfile();
     }, []);
 
     useEffect(() => {
@@ -67,7 +79,7 @@ const PatientDashboard = ({ onLogout }) => {
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchRecommendedDoctors();
     }, [form.injuryType]);
@@ -213,8 +225,15 @@ const PatientDashboard = ({ onLogout }) => {
     return (
         <Container>
             <Card>
-                <Title>👤 Пацієнт: {patient?.userName ?? ''}</Title>
-
+                <Title>👤 Кабінет пацієнта</Title>
+                <div style={{ padding: '10px' }}>
+                    <p><strong>Ім'я:</strong> {patient?.name || '—'}</p>
+                    <p><strong>Прізвище:</strong> {patient?.surname || '—'}</p>
+                    <p><strong>По батькові:</strong> {patient?.middle_name || '—'}</p>
+                    <p><strong>Email:</strong> {patient?.email || '—'}</p>
+                    <p><strong>Телефон:</strong> {patient?.phone || '—'}</p>
+                    <p><strong>Вік:</strong> {patient?.age || '—'}</p>
+                </div>
                 <h3 style={{ marginTop: '20px', color: '#6b2737' }}>📅 Новий прийом</h3>
                 <Form onSubmit={handleAddAppointment}>
                     <Label>Дата</Label>

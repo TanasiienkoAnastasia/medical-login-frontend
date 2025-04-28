@@ -19,6 +19,8 @@ import 'react-phone-input-2/lib/style.css';
 const RegistrationPage = ({ handleBack }) => {
     const [formData, setFormData] = useState({
         name: '',
+        surname: '',
+        middleName: '',
         email: '',
         password: '',
         age: '',
@@ -60,9 +62,16 @@ const RegistrationPage = ({ handleBack }) => {
             errors.push("Поле спеціальність є обовʼязковим для лікарів.");
         }
 
+        if (!formData.surname || formData.surname.length < 2) {
+            errors.push("Прізвище повинно містити щонайменше 2 символи.");
+        }
+        if (!formData.middleName || formData.middleName.length < 2) {
+            errors.push("По-батькові повинно містити щонайменше 2 символи.");
+        }
+
         if (userType === 'patient') {
             const digitsOnly = formData.phone.replace(/\D/g, '');
-            const phoneValid = digitsOnly.length >= 10 && digitsOnly.length <= 12;
+            const phoneValid = digitsOnly.length >= 7 && digitsOnly.length <= 20;
             if (!phoneValid) {
                 errors.push("Номер телефону повинен містити від 7 до 20 цифр.");
             }
@@ -75,6 +84,8 @@ const RegistrationPage = ({ handleBack }) => {
 
         const newUser = {
             name: formData.name,
+            surname: formData.surname,
+            middleName: formData.middleName,
             email: formData.email,
             password: formData.password,
             userType: userType,
@@ -99,6 +110,7 @@ const RegistrationPage = ({ handleBack }) => {
                     .join('\n');
 
                 alert(`Помилки валідації:\n${messages}`);
+
             } else {
                 alert(data?.message || 'Помилка при реєстрації');
             }
@@ -117,6 +129,22 @@ const RegistrationPage = ({ handleBack }) => {
                         name="name"
                         placeholder="Ім'я"
                         value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                    <Input
+                        type="text"
+                        name="surname"
+                        placeholder="Прізвище"
+                        value={formData.surname}
+                        onChange={handleChange}
+                        required
+                    />
+                    <Input
+                        type="text"
+                        name="middleName"
+                        placeholder="По-батькові"
+                        value={formData.middleName}
                         onChange={handleChange}
                         required
                     />
