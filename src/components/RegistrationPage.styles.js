@@ -86,3 +86,22 @@ export const UserTypeButton = styled(Button)`
   flex: 1;
   margin: 0 10px;
 `;
+
+export const ImagePreviewContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
+  width: 100%;
+  height: 150px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+`;
+
+export const ImagePreview = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+`;

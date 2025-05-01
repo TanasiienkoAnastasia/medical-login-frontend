@@ -7,7 +7,7 @@ import {
     Input,
     Button,
     UserTypeSelector,
-    UserTypeButton
+    UserTypeButton, ImagePreviewContainer, ImagePreview
 } from './RegistrationPage.styles';
 import { useLoading } from '../context/LoadingContext';
 import API_BASE_URL from "../config/api";
@@ -31,6 +31,8 @@ const RegistrationPage = ({ handleBack }) => {
     const [userType, setUserType] = useState('patient');
     const { setLoading } = useLoading();
     const [avatar, setAvatar] = useState(null);
+    const [previewUrl, setPreviewUrl] = useState(null);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -136,10 +138,20 @@ const RegistrationPage = ({ handleBack }) => {
             <FormCard>
                 <Title>Реєстрація</Title>
                 <form onSubmit={handleSubmit}>
+                    {previewUrl && (
+                        <ImagePreviewContainer>
+                            <ImagePreview src={previewUrl} alt="Прев'ю" />
+                        </ImagePreviewContainer>
+                    )}
+
                     <Input
                         type="file"
                         accept="image/*"
-                        onChange={(e) => setAvatar(e.target.files[0])}
+                        onChange={(e) => {
+                            const file = e.target.files[0];
+                            setAvatar(file);
+                            setPreviewUrl(file ? URL.createObjectURL(file) : null);
+                        }}
                     />
                     <Input
                         type="text"
