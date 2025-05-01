@@ -30,6 +30,7 @@ const RegistrationPage = ({ handleBack }) => {
 
     const [userType, setUserType] = useState('patient');
     const { setLoading } = useLoading();
+    const [avatar, setAvatar] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -82,23 +83,34 @@ const RegistrationPage = ({ handleBack }) => {
             return;
         }
 
-        const newUser = {
-            name: formData.name,
-            surname: formData.surname,
-            middleName: formData.middleName,
-            email: formData.email,
-            password: formData.password,
-            userType: userType,
-            age: Number(formData.age),
-            ...(userType === 'doctor'
-                ? { specialty: formData.specialty }
-                : { phone: formData.phone })
-        };
+        const formPayload = new FormData();
+
+        formPayload.append('name', formData.name);
+        formPayload.append('surname', formData.surname);
+        formPayload.append('middleName', formData.middleName);
+        formPayload.append('email', formData.email);
+        formPayload.append('password', formData.password);
+        formPayload.append('userType', userType);
+        formPayload.append('age', formData.age);
+
+        if (userType === 'doctor') {
+            formPayload.append('specialty', formData.specialty);
+        } else {
+            formPayload.append('phone', formData.phone);
+        }
+
+        if (avatar) {
+            formPayload.append('photo', avatar);
+        }
 
         try {
             setLoading(true);
 
-            await axios.post(`${API_BASE_URL}/auth/register`, newUser);
+            await axios.post(`${API_BASE_URL}/auth/register`, formPayload, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
             alert('Реєстрація успішна');
             handleBack();
         } catch (error) {
@@ -124,6 +136,11 @@ const RegistrationPage = ({ handleBack }) => {
             <FormCard>
                 <Title>Реєстрація</Title>
                 <form onSubmit={handleSubmit}>
+                    <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => setAvatar(e.target.files[0])}
+                    />
                     <Input
                         type="text"
                         name="name"
