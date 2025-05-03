@@ -127,7 +127,7 @@ const PatientDashboard = ({ onLogout }) => {
             try {
                 setLoading(true);
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${API_BASE_URL}/recommendations?injury=${form.complaint}`, {
+                const response = await axios.get(`${API_BASE_URL}/recommendations?complaint=${form.complaint}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDoctors(response.data.data ?? []);
