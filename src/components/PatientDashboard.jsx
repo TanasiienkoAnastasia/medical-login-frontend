@@ -21,6 +21,11 @@ import API_BASE_URL from "../config/api";
 
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
+
+    const getTodayDate = () => {
+        return new Date().toISOString().split('T')[0];
+    };
+    
     const [form, setForm] = useState({
         date: getTodayDate(),
         time: '',
@@ -33,10 +38,6 @@ const PatientDashboard = ({ onLogout }) => {
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
-
-    const getTodayDate = () => {
-        return new Date().toISOString().split('T')[0];
-    };
 
     const isTimeWithinRange = (time) => {
         const [hours, minutes] = time.split(':').map(Number);
