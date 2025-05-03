@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLoading } from '../context/LoadingContext';
 import { FaSignOutAlt, FaPlus, FaEdit, FaSave, FaTrash } from 'react-icons/fa';
-import { jwtDecode } from "jwt-decode";
 import {
     Container,
     Card,
@@ -27,6 +26,14 @@ const PatientDashboard = ({ onLogout }) => {
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
+
+    const isTimeWithinRange = (time) => {
+        const [hours, minutes] = time.split(':').map(Number);
+        const totalMinutes = hours * 60 + minutes;
+        const start = 9 * 60;   // 09:00
+        const end = 17 * 60;    // 17:00
+        return totalMinutes >= start && totalMinutes <= end;
+    };
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -89,6 +96,10 @@ const PatientDashboard = ({ onLogout }) => {
     const handleAddAppointment = async (e) => {
         e.preventDefault();
         if (!form.date || !form.time || !form.complaint || !form.doctor) return alert('Заповніть усі поля');
+
+        if (!isTimeWithinRange(form.time)) {
+            return alert('Час прийому має бути у межах з 09:00 до 17:00');
+        }
 
         const newAppointment = {
             date: form.date,
