@@ -238,7 +238,7 @@ const PatientDashboard = ({ onLogout }) => {
                     <Input type="date" name="date" value={form.date} onChange={handleChange} required />
 
                     <Label>Час</Label>
-                    <Input type="time" name="time" value={form.time} onChange={handleChange} required />
+                    <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
 
                     <Label>Скарга</Label>
                     <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
@@ -304,7 +304,7 @@ const PatientDashboard = ({ onLogout }) => {
                         <Input type="date" name="date" value={form.date} onChange={handleChange} required />
 
                         <Label>Час</Label>
-                        <Input type="time" name="time" value={form.time} onChange={handleChange} required />
+                        <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
 
                         <Label>Скарга</Label>
                         <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
