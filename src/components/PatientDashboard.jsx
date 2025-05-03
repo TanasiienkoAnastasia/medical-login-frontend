@@ -25,13 +25,12 @@ const PatientDashboard = ({ onLogout }) => {
     const getTodayDate = () => {
         return new Date().toISOString().split('T')[0];
     };
-    
+
     const [form, setForm] = useState({
         date: getTodayDate(),
         time: '',
         complaint: '',
         doctor: '',
-        injuryType: '',
         comment: ''
     });
     const [editingAppointment, setEditingAppointment] = useState(null);
@@ -68,7 +67,6 @@ const PatientDashboard = ({ onLogout }) => {
         time: '',
         complaint: '',
         doctor: '',
-        injuryType: '',
         comment: ''
     };
 
@@ -108,11 +106,28 @@ const PatientDashboard = ({ onLogout }) => {
 
     useEffect(() => {
         const fetchRecommendedDoctors = async () => {
-            if (!form.injuryType) return;
+            if (!form.complaint)
+            {
+                try {
+                    setLoading(true);
+                    const token = localStorage.getItem('token');
+                    const response = await axios.get(`${API_BASE_URL}/doctor/doctors`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setDoctors(response.data.data ?? []);
+                } catch (err) {
+                    console.error('Не вдалося отримати список лікарів', err);
+                } finally {
+                    setLoading(false);
+                }
+
+                return;
+            }
+
             try {
                 setLoading(true);
                 const token = localStorage.getItem('token');
-                const response = await axios.get(`${API_BASE_URL}/recommendations?injury=${form.injuryType}`, {
+                const response = await axios.get(`${API_BASE_URL}/recommendations?injury=${form.complaint}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDoctors(response.data.data ?? []);
@@ -124,7 +139,7 @@ const PatientDashboard = ({ onLogout }) => {
         };
 
         fetchRecommendedDoctors();
-    }, [form.injuryType]);
+    }, [form.complaint]);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -186,8 +201,7 @@ const PatientDashboard = ({ onLogout }) => {
             time: appointment.time,
             complaint: appointment.complaint,
             comment: appointment.comment || '',
-            doctor: appointment.doctor.id,
-            injuryType: ''
+            doctor: appointment.doctor.id
         });
     };
 
@@ -312,14 +326,6 @@ const PatientDashboard = ({ onLogout }) => {
 
                     <Label>Скарга</Label>
                     <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
-
-                    <Label>Підозра на тип травми</Label>
-                    <Select name="injuryType" value={form.injuryType} onChange={handleChange} required>
-                        <option value="">Оберіть травму</option>
-                        <option value="перелом">Перелом</option>
-                        <option value="вивих">Вивих</option>
-                        <option value="розтягнення">Розтягнення</option>
-                    </Select>
 
                     <Label>Лікар</Label>
                     <Select name="doctor" value={form.doctor} onChange={handleChange} required>
