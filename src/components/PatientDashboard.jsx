@@ -253,7 +253,11 @@ const PatientDashboard = ({ onLogout }) => {
             alert('Прийом оновлено');
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
-            alert('Не вдалося оновити прийом');
+            if (error.response?.status === 403) {
+                alert(error.response.data.message || 'Неможливо редагувати скасований прийом');
+            } else {
+                alert('Не вдалося оновити прийом');
+            }
         } finally {
             setLoading(false);
         }
