@@ -30,8 +30,6 @@ const PatientDashboard = ({ onLogout }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        const decoded = jwtDecode(token);
-        setPatient(decoded);
 
         const fetchAppointmentsData = async () => {
             try {
