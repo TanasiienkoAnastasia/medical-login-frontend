@@ -354,7 +354,13 @@ const PatientDashboard = ({ onLogout }) => {
                 <h3 style={{ marginTop: '30px', color: '#6b2737' }}>🗂 Історія прийомів</h3>
                 <ul style={{ listStyle: 'none', padding: 0 }}>
                     {appointments.map((app, index) => (
-                        <AppointmentItem key={index}>
+                        <AppointmentItem
+                            key={index}
+                            style={{
+                                opacity: app.status === 'скасовано' ? 0.6 : 1,
+                                backgroundColor: app.status === 'скасовано' ? '#f5f5f5' : 'white'
+                            }}
+                        >
                             <strong>Дата:</strong> {app.date}<br />
                             <strong>Час:</strong> {app.time}<br />
                             <strong>Скарга:</strong> {app.complaint}<br />
@@ -364,12 +370,18 @@ const PatientDashboard = ({ onLogout }) => {
                             <span style={{ color: app.status === 'скасовано' ? '#b10000' : '#2b7a2b' }}>
                                 {app.status}
                             </span><br />
-                            <EditButton onClick={() => handleEditAppointment(index)}>
-                                <FaEdit /> Редагувати
-                            </EditButton>
-                            <CancelButton onClick={() => handleCancelAppointment(index)}>
-                                <FaTrash /> Скасувати
-                            </CancelButton>
+                            {app.status !== 'скасовано' ? (
+                                <>
+                                    <EditButton onClick={() => handleEditAppointment(index)}>
+                                        <FaEdit /> Редагувати
+                                    </EditButton>
+                                    <CancelButton onClick={() => handleCancelAppointment(index)}>
+                                        <FaTrash /> Скасувати
+                                    </CancelButton>
+                                </>
+                            ) : (
+                                <p style={{ color: '#b10000', marginTop: '10px' }}><strong>Прийом скасовано</strong></p>
+                            )}
                         </AppointmentItem>
                     ))}
                 </ul>
