@@ -21,11 +21,22 @@ import API_BASE_URL from "../config/api";
 
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
-    const [form, setForm] = useState({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
+    const [form, setForm] = useState({
+        date: getTodayDate(),
+        time: '',
+        complaint: '',
+        doctor: '',
+        injuryType: '',
+        comment: ''
+    });
     const [editingAppointment, setEditingAppointment] = useState(null);
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
+
+    const getTodayDate = () => {
+        return new Date().toISOString().split('T')[0];
+    };
 
     const isTimeWithinRange = (time) => {
         const [hours, minutes] = time.split(':').map(Number);
@@ -47,6 +58,15 @@ const PatientDashboard = ({ onLogout }) => {
         const maxDate = new Date();
         maxDate.setMonth(maxDate.getMonth() + 2);
         return selectedDate >= today && selectedDate <= maxDate;
+    };
+
+    const emptyForm = {
+        date: getTodayDate(),
+        time: '',
+        complaint: '',
+        doctor: '',
+        injuryType: '',
+        comment: ''
     };
 
     useEffect(() => {
@@ -146,7 +166,7 @@ const PatientDashboard = ({ onLogout }) => {
 
             alert('Прийом створено');
             setAppointments([...appointments, response.data.data]);
-            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
+            setForm(emptyForm);
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
             alert(error.response?.data?.message || 'Не вдалося створити прийом');
@@ -211,7 +231,8 @@ const PatientDashboard = ({ onLogout }) => {
 
             setAppointments(updatedAppointments);
             setEditingAppointment(null);
-            setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
+            setForm(emptyForm);
+
             alert('Прийом оновлено');
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
@@ -254,7 +275,8 @@ const PatientDashboard = ({ onLogout }) => {
 
     const handleCancelEdit = () => {
         setEditingAppointment(null);
-        setForm({ date: '', time: '', complaint: '', doctor: '', injuryType: '', comment: '' });
+        setForm(emptyForm);
+
     };
 
     return (
