@@ -67,6 +67,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                     <Th>Дата</Th>
                     <Th>Час</Th>
                     <Th>Статус</Th>
+                    <Th>Телефон</Th>
                     <Th>Коментар</Th>
                 </tr>
                 </thead>
@@ -79,6 +80,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                         <Td>{a.date || '-'}</Td>
                         <Td>{a.time || '-'}</Td>
                         <Td><Status $status={a.status}>{a.status}</Status></Td>
+                        <Td>{a.patient.phone || '-'}</Td>
                         <Td>{a.comment || '-'}</Td>
                     </tr>
                 ))}
