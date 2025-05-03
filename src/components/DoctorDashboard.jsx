@@ -23,9 +23,9 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
         if (token) {
             const decoded = jwtDecode(token);
             console.log(decoded);
-            const username = decoded.userName;
+            const name = decoded.name + ' ' + decoded.surname + ' ' + decoded.middle_name;
 
-            setDoctor({ name: username });
+            setDoctor({ name: name });
         }
     }, []);
 
