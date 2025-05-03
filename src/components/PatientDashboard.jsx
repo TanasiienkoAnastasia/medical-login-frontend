@@ -35,6 +35,20 @@ const PatientDashboard = ({ onLogout }) => {
         return totalMinutes >= start && totalMinutes <= end;
     };
 
+    const getMaxDate = () => {
+        const today = new Date();
+        today.setMonth(today.getMonth() + 2);
+        return today.toISOString().split('T')[0]; // формат YYYY-MM-DD
+    };
+
+    const isDateWithinTwoMonths = (dateStr) => {
+        const selectedDate = new Date(dateStr);
+        const today = new Date();
+        const maxDate = new Date();
+        maxDate.setMonth(maxDate.getMonth() + 2);
+        return selectedDate >= today && selectedDate <= maxDate;
+    };
+
     useEffect(() => {
         const token = localStorage.getItem('token');
 
@@ -101,6 +115,10 @@ const PatientDashboard = ({ onLogout }) => {
             return alert('Час прийому має бути у межах з 09:00 до 17:00');
         }
 
+        if (!isDateWithinTwoMonths(form.date)) {
+            return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
+        }
+
         const newAppointment = {
             date: form.date,
             time: form.time,
@@ -153,6 +171,10 @@ const PatientDashboard = ({ onLogout }) => {
     const handleSaveAppointment = async () => {
         if (!isTimeWithinRange(form.time)) {
             return alert('Час прийому має бути у межах з 09:00 до 17:00');
+        }
+
+        if (!isDateWithinTwoMonths(form.date)) {
+            return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
         }
 
         const appointmentToUpdate = appointments[editingAppointment];
@@ -250,7 +272,14 @@ const PatientDashboard = ({ onLogout }) => {
                 <h3 style={{ marginTop: '20px', color: '#6b2737' }}>📅 Новий прийом</h3>
                 <Form onSubmit={handleAddAppointment}>
                     <Label>Дата</Label>
-                    <Input type="date" name="date" value={form.date} onChange={handleChange} required />
+                    <Input
+                        type="date"
+                        name="date"
+                        value={form.date}
+                        onChange={handleChange}
+                        max={getMaxDate()}
+                        required
+                    />
 
                     <Label>Час</Label>
                     <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
@@ -316,7 +345,14 @@ const PatientDashboard = ({ onLogout }) => {
                 {editingAppointment !== null && (
                     <Form onSubmit={(e) => { e.preventDefault(); handleSaveAppointment(); }}>
                         <Label>Дата</Label>
-                        <Input type="date" name="date" value={form.date} onChange={handleChange} required />
+                        <Input
+                            type="date"
+                            name="date"
+                            value={form.date}
+                            onChange={handleChange}
+                            max={getMaxDate()}
+                            required
+                        />
 
                         <Label>Час</Label>
                         <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
