@@ -42,8 +42,11 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
 
     // TODO temporary fix to avoid page crash when there are no appointments, fix properly
     const filtered = (appointments ?? []).filter(a =>
-        a.patient.username.toLowerCase().includes(search.toLowerCase()) ||
-        (a?.complaint || '').toLowerCase().includes(search.toLowerCase())
+    {
+        const patientName = a.patient.name.toLowerCase() + ' ' + a.patient.surname.toLowerCase() + a.patient.middleName.toLowerCase();
+        return patientName.includes(search.toLowerCase()) ||
+            (a?.complaint || '').toLowerCase().includes(search.toLowerCase());
+    }
     );
 
     return (
@@ -70,7 +73,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                 <tbody>
                 {filtered.map((a, i) => (
                     <tr key={i}>
-                        <Td>{a.patient.username}</Td>
+                        <Td>{(a.patient.name || '') + ' ' + (a.patient.surname || '') + ' ' + (a.patient.name || '')}</Td>
                         <Td>{a.patient.age}</Td>
                         <Td>{a.complaint || '-'}</Td>
                         <Td>{a.date || '-'}</Td>

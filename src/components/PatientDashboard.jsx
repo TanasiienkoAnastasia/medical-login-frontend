@@ -283,7 +283,7 @@ const PatientDashboard = ({ onLogout }) => {
                             <strong>Час:</strong> {app.time}<br />
                             <strong>Скарга:</strong> {app.complaint}<br />
                             <strong>Коментар:</strong> {app.comment || '—'}<br />
-                            <strong>Лікар:</strong> {(app.doctor.name || '') + ' ' + (app.doctor.surname || '') + ' ' + (app.doctor.name || '')} ({app.doctor.specialty})<br />
+                            <strong>Лікар:</strong> {(app.doctor.name || '') + ' ' + (app.doctor.surname || '') + ' ' + (app.doctor.middleName || '')} ({app.doctor.specialty})<br />
                             <strong>Статус:</strong>{' '}
                             <span style={{ color: app.status === 'скасовано' ? '#b10000' : '#2b7a2b' }}>
                                 {app.status}
