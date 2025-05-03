@@ -55,8 +55,10 @@ const PatientDashboard = ({ onLogout }) => {
     const isDateWithinTwoMonths = (dateStr) => {
         const selectedDate = new Date(dateStr);
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const maxDate = new Date();
         maxDate.setMonth(maxDate.getMonth() + 2);
+        maxDate.setHours(0, 0, 0, 0);
         return selectedDate >= today && selectedDate <= maxDate;
     };
 
@@ -299,6 +301,7 @@ const PatientDashboard = ({ onLogout }) => {
                         name="date"
                         value={form.date}
                         onChange={handleChange}
+                        min={getTodayDate()}
                         max={getMaxDate()}
                         required
                     />
@@ -372,6 +375,7 @@ const PatientDashboard = ({ onLogout }) => {
                             name="date"
                             value={form.date}
                             onChange={handleChange}
+                            min={getTodayDate()}
                             max={getMaxDate()}
                             required
                         />
