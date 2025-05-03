@@ -151,6 +151,10 @@ const PatientDashboard = ({ onLogout }) => {
     };
 
     const handleSaveAppointment = async () => {
+        if (!isTimeWithinRange(form.time)) {
+            return alert('Час прийому має бути у межах з 09:00 до 17:00');
+        }
+
         const appointmentToUpdate = appointments[editingAppointment];
         const token = localStorage.getItem('token');
 
