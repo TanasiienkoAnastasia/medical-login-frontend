@@ -39,6 +39,7 @@ const PatientDashboard = ({ onLogout }) => {
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
     const [availableSlots, setAvailableSlots] = useState([]);
+    const [loadingDoctors, setLoadingDoctors] = useState(false);
 
     const getMaxDate = () => {
         const today = new Date();
@@ -141,6 +142,8 @@ const PatientDashboard = ({ onLogout }) => {
         const token = localStorage.getItem('token');
 
         const fetchRecommendedDoctors = async () => {
+            setLoadingDoctors(true);
+
             if (!form.complaint.trim()) {
                 try {
                     const response = await axios.get(`${API_BASE_URL}/doctor/doctors`, {
@@ -149,6 +152,8 @@ const PatientDashboard = ({ onLogout }) => {
                     setDoctors(response.data.data ?? []);
                 } catch (err) {
                     console.error('Не вдалося отримати список лікарів', err);
+                } finally {
+                    setLoadingDoctors(false);
                 }
                 return;
             }
@@ -161,6 +166,8 @@ const PatientDashboard = ({ onLogout }) => {
                 setDoctors(response.data.data ?? []);
             } catch (err) {
                 console.error('Не вдалося отримати рекомендації лікарів', err);
+            } finally {
+                setLoadingDoctors(false);
             }
         };
 
@@ -170,6 +177,7 @@ const PatientDashboard = ({ onLogout }) => {
 
         return () => clearTimeout(delayDebounce);
     }, [form.complaint]);
+
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -378,8 +386,28 @@ const PatientDashboard = ({ onLogout }) => {
                         required
                     />
 
-                    <Label>Скарга</Label>
-                    <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
+                    <div style={{ position: 'relative' }}>
+                        <Label>Скарга</Label>
+                        <Input
+                            type="text"
+                            name="complaint"
+                            value={form.complaint}
+                            onChange={handleChange}
+                            required
+                        />
+                        {loadingDoctors && (
+                            <span style={{
+                                position: 'absolute',
+                                right: '10px',
+                                top: '35px',
+                                color: '#b25f7f',
+                                fontSize: '14px',
+                                fontStyle: 'italic'
+                            }}>
+                            🔄 Завантаження...
+                            </span>
+                        )}
+                    </div>
 
                     <Label>Лікар</Label>
                     <Select name="doctor" value={form.doctor} onChange={handleChange} required>
@@ -461,8 +489,28 @@ const PatientDashboard = ({ onLogout }) => {
                             required
                         />
 
-                        <Label>Скарга</Label>
-                        <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
+                        <div style={{ position: 'relative' }}>
+                            <Label>Скарга</Label>
+                            <Input
+                                type="text"
+                                name="complaint"
+                                value={form.complaint}
+                                onChange={handleChange}
+                                required
+                            />
+                            {loadingDoctors && (
+                                <span style={{
+                                    position: 'absolute',
+                                    right: '10px',
+                                    top: '35px',
+                                    color: '#b25f7f',
+                                    fontSize: '14px',
+                                    fontStyle: 'italic'
+                                }}>
+                            🔄 Завантаження...
+                            </span>
+                            )}
+                        </div>
 
                         <Label>Коментар</Label>
                         <Input type="text" name="comment" value={form.comment} onChange={handleChange} />
