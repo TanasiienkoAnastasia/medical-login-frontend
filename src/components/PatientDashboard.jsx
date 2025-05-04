@@ -125,6 +125,12 @@ const PatientDashboard = ({ onLogout }) => {
     }, [form.doctor, form.date]);
 
     useEffect(() => {
+        if (availableSlots.length > 0 && !form.time) {
+            setForm(prevForm => ({ ...prevForm, time: availableSlots[0] }));
+        }
+    }, [availableSlots]);
+
+    useEffect(() => {
         const fetchRecommendedDoctors = async () => {
             if (!form.complaint)
             {
