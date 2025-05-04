@@ -109,7 +109,6 @@ const PatientDashboard = ({ onLogout }) => {
             if (!form.complaint)
             {
                 try {
-                    setLoading(true);
                     const token = localStorage.getItem('token');
                     const response = await axios.get(`${API_BASE_URL}/doctor/doctors`, {
                         headers: { Authorization: `Bearer ${token}` }
@@ -117,15 +116,12 @@ const PatientDashboard = ({ onLogout }) => {
                     setDoctors(response.data.data ?? []);
                 } catch (err) {
                     console.error('Не вдалося отримати список лікарів', err);
-                } finally {
-                    setLoading(false);
                 }
 
                 return;
             }
 
             try {
-                setLoading(true);
                 const token = localStorage.getItem('token');
                 const response = await axios.get(`${API_BASE_URL}/recommendations?complaint=${form.complaint}`, {
                     headers: { Authorization: `Bearer ${token}` }
@@ -133,8 +129,6 @@ const PatientDashboard = ({ onLogout }) => {
                 setDoctors(response.data.data ?? []);
             } catch (err) {
                 console.error('Не вдалося отримати рекомендації лікарів', err);
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -181,6 +175,12 @@ const PatientDashboard = ({ onLogout }) => {
                     }
                 }
             );
+
+            console.log(response.data.data.time);
+            console.log(form.time);
+            if (!response.data.data.time.startsWith(form.time)) {
+                alert(`Бажаний час зайнятий. Новий час прийому: ${response.data.data.time}`);
+            }
 
             alert('Прийом створено');
             setAppointments([...appointments, response.data.data]);
