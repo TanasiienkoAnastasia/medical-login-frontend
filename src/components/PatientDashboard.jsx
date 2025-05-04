@@ -37,18 +37,7 @@ const PatientDashboard = ({ onLogout }) => {
     const [doctors, setDoctors] = useState([]);
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
-
-    const generateTimeSlots = () => {
-        const slots = [];
-        const start = 9 * 60; // 09:00
-        const end = 17 * 60 + 30; // 17:30
-        for (let mins = start; mins <= end; mins += 30) {
-            const hours = String(Math.floor(mins / 60)).padStart(2, '0');
-            const minutes = String(mins % 60).padStart(2, '0');
-            slots.push(`${hours}:${minutes}`);
-        }
-        return slots;
-    };
+    const [availableSlots, setAvailableSlots] = useState([]);
 
     const getMaxDate = () => {
         const today = new Date();
@@ -107,6 +96,33 @@ const PatientDashboard = ({ onLogout }) => {
         fetchAppointmentsData();
         fetchPatientProfile();
     }, []);
+
+    useEffect(() => {
+        const fetchAvailableSlots = async () => {
+            if (!form.doctor || !form.date) {
+                setAvailableSlots([]);
+                return;
+            }
+
+            const token = localStorage.getItem('token');
+
+            try {
+                setLoading(true);
+                const response = await axios.get(`${API_BASE_URL}/doctor/${form.doctor}/available-slots`, {
+                    params: { date: form.date },
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setAvailableSlots(response.data.data || []);
+            } catch (error) {
+                console.error('Не вдалося отримати доступні слоти:', error);
+                setAvailableSlots([]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchAvailableSlots();
+    }, [form.doctor, form.date]);
 
     useEffect(() => {
         const fetchRecommendedDoctors = async () => {
@@ -338,14 +354,6 @@ const PatientDashboard = ({ onLogout }) => {
                         required
                     />
 
-                    <Label>Час</Label>
-                    <Select name="time" value={form.time} onChange={handleChange} required>
-                        <option value="">Оберіть час</option>
-                        {generateTimeSlots().map((slot, index) => (
-                            <option key={index} value={slot}>{slot}</option>
-                        ))}
-                    </Select>
-
                     <Label>Скарга</Label>
                     <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
 
@@ -356,6 +364,14 @@ const PatientDashboard = ({ onLogout }) => {
                             <option key={index} value={doctor.id}>
                                 {doctor.name} ({doctor.specialty})
                             </option>
+                        ))}
+                    </Select>
+
+                    <Label>Час</Label>
+                    <Select name="time" value={form.time} onChange={handleChange} required>
+                        <option value="">Оберіть час</option>
+                        {availableSlots.map((slot, index) => (
+                            <option key={index} value={slot}>{slot}</option>
                         ))}
                     </Select>
 
@@ -421,14 +437,6 @@ const PatientDashboard = ({ onLogout }) => {
                             required
                         />
 
-                        <Label>Час</Label>
-                        <Select name="time" value={form.time} onChange={handleChange} required>
-                            <option value="">Оберіть час</option>
-                            {generateTimeSlots().map((slot, index) => (
-                                <option key={index} value={slot}>{slot}</option>
-                            ))}
-                        </Select>
-
                         <Label>Скарга</Label>
                         <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
 
@@ -442,6 +450,14 @@ const PatientDashboard = ({ onLogout }) => {
                                 <option key={index} value={doctor.id}>
                                     {doctor.name} ({doctor.specialty})
                                 </option>
+                            ))}
+                        </Select>
+
+                        <Label>Час</Label>
+                        <Select name="time" value={form.time} onChange={handleChange} required>
+                            <option value="">Оберіть час</option>
+                            {availableSlots.map((slot, index) => (
+                                <option key={index} value={slot}>{slot}</option>
                             ))}
                         </Select>
 
