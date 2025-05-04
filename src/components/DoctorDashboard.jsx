@@ -14,6 +14,7 @@ import {
     CloseButton
 } from './DoctorDashboard.styles';
 import API_BASE_URL from "../config/api";
+import DoctorSlotAnalytics from "./DoctorSlotAnalytics";
 
 const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
     const [showModal, setShowModal] = useState(false);
@@ -31,6 +32,7 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
 
             setDoctor({
                 name,
+                id: user.id,
                 photo_url: user.photo_url
             });
             console.log(user.photo_url)
@@ -54,6 +56,8 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
                     src={doctor.photo_url ? `${API_BASE_URL}${doctor.photo_url}` : 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'}
                     alt="Doctor"
                 />
+
+                <DoctorSlotAnalytics doctorId={doctor.id} />
 
                 <DoctorName>Д-р {doctor.name || 'Невідомий'}</DoctorName>
 
