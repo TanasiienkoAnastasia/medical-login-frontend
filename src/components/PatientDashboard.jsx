@@ -304,6 +304,22 @@ const PatientDashboard = ({ onLogout }) => {
         <Container>
             <Card>
                 <Title>👤 Кабінет пацієнта</Title>
+
+                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                    <img
+                        src={patient.photo_url ? `${API_BASE_URL}${patient.photo_url}` : 'https://img.freepik.com/free-vector/nurse-helping-patient-background_23-2148151136.jpg'}
+                        alt="Фото пацієнта"
+                        style={{
+                            width: '120px',
+                            height: '120px',
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '4px solid #b25f7f',
+                            marginBottom: '10px'
+                        }}
+                    />
+                </div>
+
                 <div style={{ padding: '10px' }}>
                     <p><strong>Ім'я:</strong> {patient?.name || '—'}</p>
                     <p><strong>Прізвище:</strong> {patient?.surname || '—'}</p>
