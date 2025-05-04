@@ -178,8 +178,9 @@ const PatientDashboard = ({ onLogout }) => {
 
             console.log(response.data.data.time);
             console.log(form.time);
-            if (!response.data.data.time.startsWith(form.time)) {
-                alert(`Бажаний час зайнятий. Новий час прийому: ${response.data.data.time}`);
+
+            if (!response.data.data.time.startsWith(form.time) || response.data.data.date !== form.date) {
+                alert(`Бажаний слот зайнятий. Ваш прийом призначено на ${response.data.data.date} о ${response.data.data.time}`);
             }
 
             alert('Прийом створено');
