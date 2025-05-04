@@ -77,7 +77,7 @@ const PatientDashboard = ({ onLogout }) => {
                 });
                 setAppointments(response.data.data ?? []);
             } catch (err) {
-                alert(err.message || 'Помилка при отриманні даних');
+                toast.error(err.message || 'Помилка при отриманні даних');
             } finally {
                 setLoading(false);
             }
@@ -174,10 +174,14 @@ const PatientDashboard = ({ onLogout }) => {
 
     const handleAddAppointment = async (e) => {
         e.preventDefault();
-        if (!form.date || !form.time || !form.complaint || !form.doctor) return alert('Заповніть усі поля');
+        if (!form.date || !form.time || !form.complaint || !form.doctor) {
+            toast.warn('Заповніть усі поля');
+            return;
+        }
 
         if (!isDateWithinTwoMonths(form.date)) {
-            return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
+            toast.warn('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
+            return;
         }
 
         const newAppointment = {
@@ -217,7 +221,7 @@ const PatientDashboard = ({ onLogout }) => {
             setForm(emptyForm);
         } catch (error) {
             console.error('Помилка при створенні прийому:', error.response?.data || error.message);
-            alert(error.response?.data?.message || 'Не вдалося створити прийом');
+            toast.error(error.response?.data?.message || 'Не вдалося створити прийом');
         } finally {
             setLoading(false);
         }
@@ -237,7 +241,8 @@ const PatientDashboard = ({ onLogout }) => {
 
     const handleSaveAppointment = async () => {
         if (!isDateWithinTwoMonths(form.date)) {
-            return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
+            toast.warn('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
+            return;
         }
 
         const appointmentToUpdate = appointments[editingAppointment];
@@ -317,7 +322,7 @@ const PatientDashboard = ({ onLogout }) => {
             toast.success('Прийом успішно скасовано');
         } catch (error) {
             console.error('Помилка при скасуванні прийому:', error.response?.data || error.message);
-            alert('Не вдалося скасувати прийом');
+            toast.error('Не вдалося скасувати прийом');
         } finally {
             setLoading(false);
         }
