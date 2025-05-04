@@ -126,6 +126,10 @@ const PatientDashboard = ({ onLogout }) => {
     }, [form.doctor, form.date]);
 
     useEffect(() => {
+        if (availableSlots.length === 0 && form.doctor && form.date) {
+            toast.warn('Немає доступних слотів на обрану дату');
+        }
+
         if (availableSlots.length > 0 && !form.time) {
             const firstAvailable = availableSlots[0];
             setForm(prevForm => ({ ...prevForm, time: firstAvailable }));
