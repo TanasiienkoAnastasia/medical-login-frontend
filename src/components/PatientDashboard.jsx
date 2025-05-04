@@ -38,12 +38,16 @@ const PatientDashboard = ({ onLogout }) => {
     const [patient, setPatient] = useState({});
     const { setLoading } = useLoading();
 
-    const isTimeWithinRange = (time) => {
-        const [hours, minutes] = time.split(':').map(Number);
-        const totalMinutes = hours * 60 + minutes;
-        const start = 9 * 60;   // 09:00
-        const end = 17 * 60;    // 17:00
-        return totalMinutes >= start && totalMinutes <= end;
+    const generateTimeSlots = () => {
+        const slots = [];
+        const start = 9 * 60; // 09:00
+        const end = 17 * 60 + 30; // 17:30
+        for (let mins = start; mins <= end; mins += 30) {
+            const hours = String(Math.floor(mins / 60)).padStart(2, '0');
+            const minutes = String(mins % 60).padStart(2, '0');
+            slots.push(`${hours}:${minutes}`);
+        }
+        return slots;
     };
 
     const getMaxDate = () => {
@@ -143,10 +147,6 @@ const PatientDashboard = ({ onLogout }) => {
         e.preventDefault();
         if (!form.date || !form.time || !form.complaint || !form.doctor) return alert('Заповніть усі поля');
 
-        if (!isTimeWithinRange(form.time)) {
-            return alert('Час прийому має бути у межах з 09:00 до 17:00');
-        }
-
         if (!isDateWithinTwoMonths(form.date)) {
             return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
         }
@@ -207,10 +207,6 @@ const PatientDashboard = ({ onLogout }) => {
     };
 
     const handleSaveAppointment = async () => {
-        if (!isTimeWithinRange(form.time)) {
-            return alert('Час прийому має бути у межах з 09:00 до 17:00');
-        }
-
         if (!isDateWithinTwoMonths(form.date)) {
             return alert('Дата прийому має бути не пізніше ніж через 2 місяці від сьогодні');
         }
@@ -343,7 +339,12 @@ const PatientDashboard = ({ onLogout }) => {
                     />
 
                     <Label>Час</Label>
-                    <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
+                    <Select name="time" value={form.time} onChange={handleChange} required>
+                        <option value="">Оберіть час</option>
+                        {generateTimeSlots().map((slot, index) => (
+                            <option key={index} value={slot}>{slot}</option>
+                        ))}
+                    </Select>
 
                     <Label>Скарга</Label>
                     <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
@@ -421,7 +422,12 @@ const PatientDashboard = ({ onLogout }) => {
                         />
 
                         <Label>Час</Label>
-                        <Input type="time" name="time" value={form.time} min="09:00" max="17:00" onChange={handleChange} required />
+                        <Select name="time" value={form.time} onChange={handleChange} required>
+                            <option value="">Оберіть час</option>
+                            {generateTimeSlots().map((slot, index) => (
+                                <option key={index} value={slot}>{slot}</option>
+                            ))}
+                        </Select>
 
                         <Label>Скарга</Label>
                         <Input type="text" name="complaint" value={form.complaint} onChange={handleChange} required />
