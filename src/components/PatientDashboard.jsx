@@ -279,10 +279,13 @@ const PatientDashboard = ({ onLogout }) => {
             toast.success('Прийом оновлено');
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
+
             if (error.response?.status === 403) {
-                alert(error.response.data.message || 'Неможливо редагувати скасований прийом');
+                toast.error(error.response.data.message || 'Неможливо редагувати скасований прийом');
+            } else if (error.response?.status === 409) {
+                toast.warn(error.response.data.message || 'Слот уже зайнятий');
             } else {
-                alert('Не вдалося оновити прийом');
+                toast.error('Не вдалося оновити прийом');
             }
         } finally {
             setLoading(false);
