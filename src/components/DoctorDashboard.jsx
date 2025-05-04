@@ -13,6 +13,7 @@ import {
     ModalContent,
     CloseButton
 } from './DoctorDashboard.styles';
+import API_BASE_URL from "../config/api";
 
 const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
     const [showModal, setShowModal] = useState(false);
@@ -20,12 +21,19 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        if (token) {
-            const decoded = jwtDecode(token);
-            console.log(decoded);
-            const name = decoded.name + ' ' + decoded.surname + ' ' + decoded.middle_name;
+        const userData = localStorage.getItem('user');
+        console.log(userData)
 
-            setDoctor({ name: name });
+        if (token && userData) {
+            const decoded = jwtDecode(token);
+            const user = JSON.parse(userData);
+            const name = `${decoded.name} ${decoded.surname} ${decoded.middle_name}`;
+
+            setDoctor({
+                name,
+                photo_url: user.photo_url
+            });
+            console.log(user.photo_url)
         }
     }, []);
 
@@ -42,9 +50,8 @@ const DoctorDashboard = ({ onLogout, onViewPatients: onViewAppointments }) => {
 
             <Container>
                 <Title>Керуйте прийомами ваших пацієнтів</Title>
-                {/* TODO doctor and patient should have ability to set image during registration */}
                 <DoctorImage
-                    src='https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'
+                    src={doctor.photo_url ? `${API_BASE_URL}${doctor.photo_url}` : 'https://img.freepik.com/free-vector/doctor-character-background_1270-84.jpg'}
                     alt="Doctor"
                 />
 

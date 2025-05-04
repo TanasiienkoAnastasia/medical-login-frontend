@@ -19,6 +19,7 @@ function AppWrapper() {
 
     const handleLoginSuccess = (user, access_token) => {
         localStorage.setItem('token', access_token);
+        localStorage.setItem('user', JSON.stringify(user));
 
         alert(`Успішний вхід як ${user.userType === 'doctor' ? 'лікар' : 'пацієнт'}`);
 
