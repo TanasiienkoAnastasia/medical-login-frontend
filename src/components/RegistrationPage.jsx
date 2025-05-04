@@ -11,10 +11,9 @@ import {
 } from './RegistrationPage.styles';
 import { useLoading } from '../context/LoadingContext';
 import API_BASE_URL from "../config/api";
-import InputMask from 'react-input-mask';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
-
+import { toast } from 'react-toastify';
 
 const RegistrationPage = ({ handleBack }) => {
     const [formData, setFormData] = useState({
@@ -81,7 +80,7 @@ const RegistrationPage = ({ handleBack }) => {
         }
 
         if (errors.length > 0) {
-            alert(errors.join('\n'));
+            toast.error(errors.join('\n'));
             return;
         }
 
@@ -113,7 +112,7 @@ const RegistrationPage = ({ handleBack }) => {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-            alert('Реєстрація успішна');
+            toast.success('Реєстрація успішна');
             handleBack();
         } catch (error) {
             const data = error.response?.data;
@@ -123,10 +122,10 @@ const RegistrationPage = ({ handleBack }) => {
                     .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
                     .join('\n');
 
-                alert(`Помилки валідації:\n${messages}`);
+                toast.error(`Помилки валідації:\n${messages}`);
 
             } else {
-                alert(data?.message || 'Помилка при реєстрації');
+                toast.error(data?.message || 'Помилка при реєстрації');
             }
         } finally {
             setLoading(false);

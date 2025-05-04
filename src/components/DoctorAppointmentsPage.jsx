@@ -12,6 +12,7 @@ import {
 } from './DoctorAppointmentsPage.styles';
 import axios from "axios";
 import API_BASE_URL from "../config/api";
+import { toast } from 'react-toastify';
 
 const DoctorAppointmentsPage = ({ handleBack }) => {
     const [appointments, setAppointments] = useState([]);
@@ -31,7 +32,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                 });
                 setAppointments(response.data.data);
             } catch (err) {
-                alert(err.message || 'Помилка при отриманні даних');
+                toast.error(err.message || 'Помилка при отриманні даних');
             } finally {
                 setLoading(false);
             }

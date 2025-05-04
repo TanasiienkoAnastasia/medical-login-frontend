@@ -15,6 +15,7 @@ import GlobalSpinner from "./components/GlobalSpinner";
 import useAxiosInterceptor from "./hooks/useAxiosInterceptor";
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 function AppWrapper() {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ function AppWrapper() {
         localStorage.setItem('token', access_token);
         localStorage.setItem('user', JSON.stringify(user));
 
-        alert(`Успішний вхід як ${user.userType === 'doctor' ? 'лікар' : 'пацієнт'}`);
+        toast.success(`Успішний вхід як ${user.userType === 'doctor' ? 'лікар' : 'пацієнт'}`);
 
         if (user.userType === 'doctor') {
             navigate('/doctor');

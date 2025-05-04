@@ -10,6 +10,7 @@ import {
     BottomRow
 } from './LoginPage.styles';
 import API_BASE_URL from "../config/api";
+import { toast } from 'react-toastify';
 
 const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
     const [email, setEmail] = useState('');
@@ -31,7 +32,7 @@ const LoginPage = ({ handleRegister, handleLoginSuccess }) => {
 
             handleLoginSuccess(user, access_token);
         } catch (err) {
-            alert(err.response?.data?.message || 'Помилка при вході');
+            toast.error(err.response?.data?.message || 'Помилка при вході');
         } finally {
             setLoading(false);
         }
