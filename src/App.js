@@ -13,6 +13,8 @@ import PatientDashboard from './components/PatientDashboard';
 import {LoadingProvider} from "./context/LoadingContext";
 import GlobalSpinner from "./components/GlobalSpinner";
 import useAxiosInterceptor from "./hooks/useAxiosInterceptor";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function AppWrapper() {
     const navigate = useNavigate();
@@ -38,18 +40,21 @@ function AppWrapper() {
     useAxiosInterceptor();
 
     return (
-        <LoadingProvider>
-            <GlobalSpinner />
-            <Routes>
-                <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
-                <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
-                <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
-                <Route path="/doctor/patients" element={<DoctorAppointmentsPage handleBack={() => navigate('/doctor')} />} />
-                <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
-                <Route path="/" element={<Navigate to="/login" />} />
-                <Route path="*" element={<Navigate to="/login" />} />
-            </Routes>
-        </LoadingProvider>
+        <>
+            <ToastContainer position="top-right" autoClose={3000} />
+            <LoadingProvider>
+                <GlobalSpinner />
+                <Routes>
+                    <Route path="/login" element={<LoginPage handleLoginSuccess={handleLoginSuccess} handleRegister={() => navigate('/register')}/>} />
+                    <Route path="/register" element={<RegistrationPage handleBack={() => navigate('/login')} />} />
+                    <Route path="/doctor" element={<DoctorDashboard onLogout={handleLogout} onViewPatients={() => navigate('/doctor/patients')} />} />
+                    <Route path="/doctor/patients" element={<DoctorAppointmentsPage handleBack={() => navigate('/doctor')} />} />
+                    <Route path="/patient" element={<PatientDashboard onLogout={handleLogout} />} />
+                    <Route path="/" element={<Navigate to="/login" />} />
+                    <Route path="*" element={<Navigate to="/login" />} />
+                </Routes>
+            </LoadingProvider>
+        </>
     );
 }
 

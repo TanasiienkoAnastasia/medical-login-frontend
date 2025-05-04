@@ -18,6 +18,7 @@ import {
 } from './PatientDashboard.styles';
 import axios from "axios";
 import API_BASE_URL from "../config/api";
+import { toast } from 'react-toastify';
 
 const PatientDashboard = ({ onLogout }) => {
     const [appointments, setAppointments] = useState([]);
@@ -126,7 +127,9 @@ const PatientDashboard = ({ onLogout }) => {
 
     useEffect(() => {
         if (availableSlots.length > 0 && !form.time) {
-            setForm(prevForm => ({ ...prevForm, time: availableSlots[0] }));
+            const firstAvailable = availableSlots[0];
+            setForm(prevForm => ({ ...prevForm, time: firstAvailable }));
+            toast.info(`Автоматично обрано доступний час: ${firstAvailable}`);
         }
     }, [availableSlots]);
 
