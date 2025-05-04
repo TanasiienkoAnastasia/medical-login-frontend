@@ -209,10 +209,10 @@ const PatientDashboard = ({ onLogout }) => {
             console.log(form.time);
 
             if (!response.data.data.time.startsWith(form.time) || response.data.data.date !== form.date) {
-                alert(`Бажаний слот зайнятий. Ваш прийом призначено на ${response.data.data.date} о ${response.data.data.time}`);
+                toast.info(`Бажаний час зайнятий. Новий час прийому: ${response.data.data.time}`);
             }
 
-            alert('Прийом створено');
+            toast.success('Прийом створено');
             setAppointments([...appointments, response.data.data]);
             setForm(emptyForm);
         } catch (error) {
@@ -276,7 +276,7 @@ const PatientDashboard = ({ onLogout }) => {
             setEditingAppointment(null);
             setForm(emptyForm);
 
-            alert('Прийом оновлено');
+            toast.success('Прийом оновлено');
         } catch (error) {
             console.error('Помилка при оновленні прийому:', error.response?.data || error.message);
             if (error.response?.status === 403) {
@@ -311,7 +311,7 @@ const PatientDashboard = ({ onLogout }) => {
             updated[index].status = 'скасовано';
             setAppointments(updated);
 
-            alert('Прийом успішно скасовано');
+            toast.success('Прийом успішно скасовано');
         } catch (error) {
             console.error('Помилка при скасуванні прийому:', error.response?.data || error.message);
             alert('Не вдалося скасувати прийом');
