@@ -138,11 +138,11 @@ const PatientDashboard = ({ onLogout }) => {
     }, [availableSlots]);
 
     useEffect(() => {
+        const token = localStorage.getItem('token');
+
         const fetchRecommendedDoctors = async () => {
-            if (!form.complaint)
-            {
+            if (!form.complaint.trim()) {
                 try {
-                    const token = localStorage.getItem('token');
                     const response = await axios.get(`${API_BASE_URL}/doctor/doctors`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
@@ -150,13 +150,12 @@ const PatientDashboard = ({ onLogout }) => {
                 } catch (err) {
                     console.error('Не вдалося отримати список лікарів', err);
                 }
-
                 return;
             }
 
             try {
-                const token = localStorage.getItem('token');
-                const response = await axios.get(`${API_BASE_URL}/recommendations?complaint=${form.complaint}`, {
+                const response = await axios.get(`${API_BASE_URL}/recommendations`, {
+                    params: { complaint: form.complaint },
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setDoctors(response.data.data ?? []);
@@ -165,7 +164,11 @@ const PatientDashboard = ({ onLogout }) => {
             }
         };
 
-        fetchRecommendedDoctors();
+        const delayDebounce = setTimeout(() => {
+            fetchRecommendedDoctors();
+        }, 500);
+
+        return () => clearTimeout(delayDebounce);
     }, [form.complaint]);
 
     const handleChange = (e) => {
