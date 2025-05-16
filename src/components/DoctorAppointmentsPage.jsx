@@ -18,6 +18,9 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
     const [appointments, setAppointments] = useState([]);
     const [search, setSearch] = useState('');
     const { setLoading } = useLoading();
+    const [editingId, setEditingId] = useState(null);
+    const [medicalDataInput, setMedicalDataInput] = useState('');
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -49,6 +52,35 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
             (a?.complaint || '').toLowerCase().includes(search.toLowerCase());
     }
     );
+
+    const saveMedicalData = async (id) => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('token');
+
+            await axios.patch(`${API_BASE_URL}/doctor/appointments/${id}/medical-data`, {
+                medical_data: medicalDataInput
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            setAppointments(prev =>
+                prev.map(app =>
+                    app.id === id ? { ...app, medical_data: medicalDataInput } : app
+                )
+            );
+
+            toast.success('Медичні дані збережено');
+            setEditingId(null);
+            setMedicalDataInput('');
+        } catch (err) {
+            toast.error(err.message || 'Помилка при збереженні');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const updateStatus = async (id, newStatus) => {
         try {
@@ -100,6 +132,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                     <Th>Телефон</Th>
                     <Th>Коментар</Th>
                     <Th>Статус</Th>
+                    <Th>Медичні данні</Th>
                 </tr>
                 </thead>
                 <tbody>
@@ -119,6 +152,29 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                                 <button onClick={() => updateStatus(a.id, 'упішно')}>Позначити як упішно</button>
                                 <button onClick={() => updateStatus(a.id, 'запізнення')}>Позначити як запізнення</button>
                             </div>
+                        </Td>
+                        <Td>
+                            <div>{a.comment || '-'}</div>
+                            <div style={{ fontSize: '12px', color: '#555' }}>
+                                {a.medical_data ? `Медичні дані: ${a.medical_data}` : ''}
+                            </div>
+
+                            {editingId === a.id ? (
+                                <div style={{ marginTop: '8px' }}>
+      <textarea
+          value={medicalDataInput}
+          onChange={(e) => setMedicalDataInput(e.target.value)}
+          placeholder="Введіть медичні дані"
+          rows={3}
+          style={{ width: '100%' }}
+      />
+                                    <button onClick={() => saveMedicalData(a.id)}>Зберегти</button>
+                                </div>
+                            ) : (
+                                <button onClick={() => { setEditingId(a.id); setMedicalDataInput(a.medical_data || '') }}>
+                                    Додати медичні дані
+                                </button>
+                            )}
                         </Td>
 
 
