@@ -149,13 +149,15 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                         <Td>
                             <Status $status={a.status}>{a.status}</Status>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
-                                <button onClick={() => updateStatus(a.id, 'упішно')}>Позначити як упішно</button>
+                                <button onClick={() => updateStatus(a.id, 'пішно')}>Позначити як пішно</button>
                                 <button onClick={() => updateStatus(a.id, 'запізнення')}>Позначити як запізнення</button>
                             </div>
                         </Td>
+
                         <Td>
                             <div>{a.comment || '-'}</div>
-                            <div style={{ fontSize: '12px', color: '#555' }}>
+
+                            <div style={{ fontSize: '12px', color: '#555', marginTop: '4px' }}>
                                 {a.medical_data ? `Медичні дані: ${a.medical_data}` : ''}
                             </div>
 
@@ -166,12 +168,20 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
           onChange={(e) => setMedicalDataInput(e.target.value)}
           placeholder="Введіть медичні дані"
           rows={3}
-          style={{ width: '100%' }}
+          style={{ width: '100%', resize: 'vertical' }}
       />
-                                    <button onClick={() => saveMedicalData(a.id)}>Зберегти</button>
+                                    <button onClick={() => saveMedicalData(a.id)} style={{ marginTop: '4px' }}>
+                                        Зберегти
+                                    </button>
                                 </div>
                             ) : (
-                                <button onClick={() => { setEditingId(a.id); setMedicalDataInput(a.medical_data || '') }}>
+                                <button
+                                    onClick={() => {
+                                        setEditingId(a.id);
+                                        setMedicalDataInput(a.medical_data || '');
+                                    }}
+                                    style={{ marginTop: '6px' }}
+                                >
                                     Додати медичні дані
                                 </button>
                             )}
