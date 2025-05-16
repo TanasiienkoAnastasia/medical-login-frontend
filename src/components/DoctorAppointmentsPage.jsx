@@ -50,6 +50,35 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
     }
     );
 
+    const updateStatus = async (id, newStatus) => {
+        try {
+            setLoading(true);
+            const token = localStorage.getItem('token');
+
+            const response = await axios.patch(`${API_BASE_URL}/doctor/appointments/${id}/status`, {
+                status: newStatus
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            const updated = response.data.data; // якщо API повертає оновлений об'єкт
+
+            // ❗ Оновити СТАН (таблицю)
+            setAppointments(prev =>
+                prev.map(app => app.id === updated.id ? updated : app)
+            );
+
+            toast.success('Статус оновлено');
+        } catch (err) {
+            toast.error(err.message || 'Помилка при оновленні статусу');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+
     return (
         <Container>
             <Title>Список прийомів</Title>
@@ -70,6 +99,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                     <Th>Статус</Th>
                     <Th>Телефон</Th>
                     <Th>Коментар</Th>
+                    <Th>Статус</Th>
                 </tr>
                 </thead>
                 <tbody>
@@ -83,6 +113,18 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                         <Td><Status $status={a.status}>{a.status}</Status></Td>
                         <Td>{a.patient.phone || '-'}</Td>
                         <Td>{a.comment || '-'}</Td>
+                        <Td>
+                            <Status $status={a.status}>{a.status}</Status>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
+                                <button onClick={() => updateStatus(a.id, 'упішно')}>Позначити як упішно</button>
+                                <button onClick={() => updateStatus(a.id, 'запізнення')}>Позначити як запізнення</button>
+                            </div>
+                        </Td>
+
+
+
+
+
                     </tr>
                 ))}
                 </tbody>
