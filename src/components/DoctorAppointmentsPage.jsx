@@ -149,7 +149,7 @@ const DoctorAppointmentsPage = ({ handleBack }) => {
                         <Td>
                             <Status $status={a.status}>{a.status}</Status>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '4px' }}>
-                                <button onClick={() => updateStatus(a.id, 'пішно')}>Позначити як пішно</button>
+                                <button onClick={() => updateStatus(a.id, 'успішно')}>Позначити як успішно</button>
                                 <button onClick={() => updateStatus(a.id, 'запізнення')}>Позначити як запізнення</button>
                             </div>
                         </Td>
